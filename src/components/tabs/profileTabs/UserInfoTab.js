@@ -1,8 +1,19 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import { useSelector,useDispatch } from "react-redux";
+import {
+  selectLoggedInUserInfo,
+  fetchUserByIdAsync
+} from "../../../features/Auth/AuthSlice";
 
-const UserInfoTab = ({user}) => {
- 
-  
+const UserInfoTab = () => {
+  const userId = Cookies.get("userID");
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUserByIdAsync(userId));
+  }, []);
+  const userInfo = useSelector(selectLoggedInUserInfo);
   return (
     <div className="col-xxl-8 col-lg-8 shadow-effect">
       <div
@@ -11,8 +22,7 @@ const UserInfoTab = ({user}) => {
         role="tabpanel"
         aria-labelledby="nav-information-tab"
       >
-{user.map((user,index)=>(
-  <div className="profile__info" key={index}>
+        <div className="profile__info">
           <h3 className="profile__info-title">Personal Details</h3>
           <div className="profile__info-content">
             <form action="#">
@@ -23,7 +33,7 @@ const UserInfoTab = ({user}) => {
                       <input
                         type="text"
                         placeholder="Enter your username"
-                        defaultValue={user.name}
+                        defaultValue={userInfo.name}
                       />
                       <span>
                         <svg
@@ -58,7 +68,7 @@ const UserInfoTab = ({user}) => {
                       <input
                         type="email"
                         placeholder="Enter your email"
-                        defaultValue={user.email}
+                        defaultValue={userInfo.email}
                       />
                       <span>
                         <svg
@@ -95,7 +105,7 @@ const UserInfoTab = ({user}) => {
                       <input
                         type="text"
                         placeholder="Enter username"
-                        defaultValue={user.username}
+                        defaultValue={userInfo.email}
                       />
                       <span>
                         <i className="fa-brands fa-facebook-f" />
@@ -109,7 +119,7 @@ const UserInfoTab = ({user}) => {
                       <input
                         type="text"
                         placeholder="Enter username"
-                        defaultValue={user.username}
+                        defaultValue={userInfo.email}
                       />
                       <span>
                         <i className="fa-brands fa-twitter" />
@@ -123,7 +133,7 @@ const UserInfoTab = ({user}) => {
                       <input
                         type="text"
                         placeholder="Enter your number"
-                        defaultValue={user.mobile}
+                        defaultValue={userInfo.contact}
                       />
                       <span>
                         <svg
@@ -178,7 +188,7 @@ const UserInfoTab = ({user}) => {
                       <input
                         type="text"
                         placeholder="Enter your address"
-                        defaultValue={user.address}
+                        defaultValue={userInfo.address}
                       />
                       <span>
                         <svg
@@ -224,8 +234,6 @@ const UserInfoTab = ({user}) => {
             </form>
           </div>
         </div>
-))
-       }
       </div>
     </div>
   );

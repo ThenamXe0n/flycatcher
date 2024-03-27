@@ -1,6 +1,18 @@
-import React from "react";
+import Cookies from "js-cookie";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserByIdAsync, selectLoggedInUserInfo } from "../../../features/Auth/AuthSlice";
+import { selectUserCartItems } from "../../../features/Cart/CartSlice";
 
 const UserProfileTab = ({ username, userImg }) => {
+  const loggedInUser = useSelector(selectLoggedInUserInfo);
+  const userId = Cookies.get("userID");
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUserByIdAsync(userId));
+  }, [,dispatch,userId]);
+  const cart = useSelector(selectUserCartItems)
+  const userCartItem = cart.length
   return (
     <div className="col-xxl-8 col-lg-8 shadow-effect">
       <div className="profile__main">
@@ -22,9 +34,7 @@ const UserProfileTab = ({ username, userImg }) => {
                   </div>
                 </div>
                 <div className="profile__main-content">
-                  <h4 className="profile__main-title">
-                    Welcome Mr. {username}!
-                  </h4>
+                 <h4 className="profile__main-title">Welcome!</h4>
                   <p>
                     You have <span>08</span> notifications
                   </p>
@@ -33,7 +43,17 @@ const UserProfileTab = ({ username, userImg }) => {
             </div>
             <div className="col-md-6">
               <div className="profile__main-logout text-sm-end">
-                <button href="login.html" className="tp-logout-btn" onClick={()=>{localStorage.removeItem("token");localStorage.removeItem("user");window.location.replace("/login")}}>
+                <button
+                  href="login.html"
+                  className="tp-logout-btn"
+                  onClick={() => {
+                    Cookies.remove("token");
+                    localStorage.removeItem("user");
+                    Cookies.remove("userID");
+                    Cookies.set("UserLoggedIn", "no");
+                    window.location.replace("/login");
+                  }}
+                >
                   Logout
                 </button>
               </div>
@@ -86,7 +106,7 @@ const UserProfileTab = ({ username, userImg }) => {
                 <div className="profile__main-info-icon">
                   <span>
                     <span className="profile-icon-count profile-wishlist">
-                      10
+                      {userCartItem}
                     </span>
                     <svg
                       viewBox="0 -20 480 480"

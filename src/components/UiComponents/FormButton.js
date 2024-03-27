@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-const FormButton = ({name,NavigateTo}) => {
+const FormButton = ({name,NavigateTo,type,size}) => {
   return (
-    <div className="tp-login-bottom">
-    <Link to={`${NavigateTo}`} className="tp-login-btn w-100">
+    <button className="tp-login-bottom" style={{width:`${size}`}} type={type}>
+    <p className="tp-login-btn w-100">
       {name}
-    </Link>
-  </div>
+    </p>
+  </button>
   )
 }
 

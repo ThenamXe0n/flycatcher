@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import BlogCard from "./BlogCard";
+import axios from "axios";
+import moment from "moment";
 
 const BlogArea = () => {
+  const [blogs, setBlogs] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/news/show")
+      .then((res) => setBlogs(res.data))
+      .catch((error) => console.log(error.message));
+  }, []);
+
   return (
     <section className="tp-blog-area pt-50 pb-75">
       <div className="container">
@@ -69,10 +79,38 @@ const BlogArea = () => {
             <div className="tp-blog-main-slider">
               <div className="tp-blog-main-slider-active swiper-container">
                 <div className="swiper-wrapper">
-                  <BlogCard blogTitle={"The Modern Art Clay Ceramics"} blogDate={"14 July, 2022"} blogImage={"assets/img/blog/blog-1.jpg"} blogIsOf={"Tablet"} blogType={"News"} blogDescription={"The world is an amazing place providing an assortment of interesting location across"} />
-                  <BlogCard blogTitle={"How clothes are linked to climate"} blogDate={"10 Nov, 2022"} blogImage={"assets/img/blog/blog-2.jpg"} blogIsOf={"Monitor"} blogType={"Texhnology"} blogDescription={"The world is an amazing place providing an assortment of interesting location across"} />
-                  <BlogCard blogTitle={"How clothes are linked to climate"} blogDate={"10 Nov, 2022"} blogImage={"assets/img/blog/blog-3    .jpg"} blogIsOf={"Monitor"} blogType={"Texhnology"} blogDescription={"The world is an amazing place providing an assortment of interesting location across"} />
-                 
+                  {blogs.map((item, index) => (
+                    <div key={index}>
+                      <BlogCard
+                        blogTitle={item.title}
+                        blogDate={moment(item.publishon).format("DD MMM,YYYY")}
+                        blogImage={item.ImgURL}
+                        blogIsOf={item.genre}
+                        blogType={item.blogtype}
+                        blogDescription={item.description}
+                      />
+                    </div>
+                  ))}
+                  {/* <BlogCard
+                    blogTitle={"How clothes are linked to climate"}
+                    blogDate={"10 Nov, 2022"}
+                    blogImage={"assets/img/blog/blog-2.jpg"}
+                    blogIsOf={"Monitor"}
+                    blogType={"Texhnology"}
+                    blogDescription={
+                      "The world is an amazing place providing an assortment of interesting location across"
+                    }
+                  />
+                  <BlogCard
+                    blogTitle={"How clothes are linked to climate"}
+                    blogDate={"10 Nov, 2022"}
+                    blogImage={"assets/img/blog/blog-3    .jpg"}
+                    blogIsOf={"Monitor"}
+                    blogType={"Texhnology"}
+                    blogDescription={
+                      "The world is an amazing place providing an assortment of interesting location across"
+                    }
+                  /> */}
                 </div>
               </div>
             </div>

@@ -1,6 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import { FaAngleDown, FaRegUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { CgLogOut } from "react-icons/cg";
+import Cookies from "js-cookie";
+import { IoCartOutline, IoLogInOutline } from "react-icons/io5";
+import { PiHandHeart } from "react-icons/pi";
 
 const HeaderTop = () => {
+  const [showSettingMenu, setShowSettingMenu] = useState(false);
+  const toggleSettingMenu = () => {
+    !showSettingMenu ? setShowSettingMenu(true) : setShowSettingMenu(false);
+  };
+  const user = Cookies.get("UserLoggedIn");
+
+
   return (
     <div className="tp-header-top black-bg p-relative z-index-1 d-none d-md-block">
       <div className="container">
@@ -58,7 +71,7 @@ const HeaderTop = () => {
                   >
                     English
                   </span>
-                  <ul>
+                  <ul className="hidden">
                     <li>
                       <a href="#">Spanish</a>
                     </li>
@@ -75,9 +88,12 @@ const HeaderTop = () => {
                     className="tp-header-currency-toggle"
                     id="tp-header-currency-toggle"
                   >
-                    USD
+                    <div className="flex flex-row items-center gap-3">
+                      {" "}
+                      Currency <FaAngleDown />
+                    </div>
                   </span>
-                  <ul>
+                  <ul className="hidden">
                     <li>
                       <a href="#">EUR</a>
                     </li>
@@ -93,26 +109,88 @@ const HeaderTop = () => {
                   </ul>
                 </div>
                 <div className="tp-header-top-menu-item tp-header-setting">
+                  {console.log(showSettingMenu)}
                   <span
+                    onClick={toggleSettingMenu}
                     className="tp-header-setting-toggle"
                     id="tp-header-setting-toggle"
                   >
-                    Setting
+                    <div className="flex flex-row items-center gap-3">
+                      {" "}
+                      Setting <FaAngleDown />
+                    </div>
                   </span>
-                  <ul>
-                    <li>
-                      <a href="profile.html">My Profile</a>
-                    </li>
-                    <li>
-                      <a href="wishlist.html">Wishlist</a>
-                    </li>
-                    <li>
-                      <a href="cart.html">Cart</a>
-                    </li>
-                    <li>
-                      <a href="login.html">Logout</a>
-                    </li>
-                  </ul>
+                  {user && user === "yes" ? (
+                    <ul
+                      className={
+                        !showSettingMenu
+                          ? ` z-0 -translate-y-52 h-0 overflow-hidden opacity-0 duration-300`
+                          : ` opacity-100 block translate-y-0 duration-500 bg-[azure]`
+                      }
+                    >
+                      <li>
+                        <Link to="/user">
+                          <div className="flex flex-row gap-1 items-center">
+                            <FaRegUser /> My Profile
+                          </div>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/wishlist">
+                          <div className="flex flex-row gap-1 items-center">
+                            <PiHandHeart className="m-0" /> Wishlist
+                          </div>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/cart">
+                          <div className="flex flex-row gap-1 items-center">
+                            <IoCartOutline className="m-0" /> Cart
+                          </div>
+                        </Link>
+                      </li>
+                      <li
+                        className=" cursor-pointer hover:text-[dodgerblue] text-black"
+                        onClick={() => {
+                          localStorage.removeItem("user");
+                          Cookies.remove("userID");
+                          Cookies.remove("token");
+                          Cookies.set("UserLoggedIn", "no");
+                          alert("You have been logged out ");
+                          window.location.replace("/")
+                        }}
+                      >
+                        <Link>
+                          <div className="flex flex-row gap-1 justify-items-start items-center">
+                            <CgLogOut className="m-0" /> Logout
+                          </div>
+                        </Link>
+                      </li>
+                    </ul>
+                  ) : (
+                    <ul
+                      className={
+                        !showSettingMenu
+                          ? ` z-0 -translate-y-52 h-0 overflow-hidden opacity-0 duration-300`
+                          : ` opacity-100 translate-y-0 duration-500 bg-[azure] flex flex-col gap-2`
+                      }
+                    >
+                      <li>
+                        <Link to="/login">
+                          <div className="flex flex-row gap-1 items-center">
+                            <IoLogInOutline className="m-0"/> Log In/Sign In
+                          </div>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/register">
+                          <div className="flex flex-row gap-1 items-center">
+                             Register / Sign up
+                          </div>
+                        </Link>
+                      </li>
+                    </ul>
+                  )}
                 </div>
               </div>
             </div>

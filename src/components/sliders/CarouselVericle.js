@@ -6,7 +6,7 @@ const CarouselVericle = () => {
   const [activeSlider, setActiveSlider] = useState(0);
 
   return (
-    <div class="tp-product-banner-area pb-90">
+    <div className="tp-product-banner-area pb-90">
       <div className="container">
         <div className="tp-product-banner-slider fix">
           <div className="tp-product-banner-slider-active swiper-container">

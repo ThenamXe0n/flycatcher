@@ -12,7 +12,7 @@ const ProductGrid = () => {
               id="new-tab-pane"
               role="tabpanel"
               aria-labelledby="new-tab"
-              tabindex="0"
+              tabIndex="0"
             >
               <div className="row">
 
