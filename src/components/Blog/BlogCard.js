@@ -1,11 +1,12 @@
 import React from "react";
+import { GoTag } from "react-icons/go";
 
 const BlogCard = ({blogDate,blogIsOf,blogType,blogDescription,blogTitle,blogImage}) => {
   return (
-    <div className="tp-blog-item mb-30 swiper-slide w-[30rem] m-6">
+    <div className="tp-blog-item mb-30 swiper-slide w-[30rem] m-6" >
       <div className="tp-blog-thumb p-relative fix">
         <a href="blog-details.html">
-          <img src={blogImage} alt="blog-image" />
+          <img src={blogImage} alt="blog" />
         </a>
         <div className="tp-blog-meta tp-blog-meta-date">
           <span>{blogDate}</span>
@@ -19,14 +20,14 @@ const BlogCard = ({blogDate,blogIsOf,blogType,blogDescription,blogTitle,blogImag
         {/* <h3 className="tp-blog-title">
           <a href="blog-details.html">The Modern Art Clay Ceramics.</a>
         </h3> */}
-        <div className="tp-blog-tag">
+        <div className="tp-blog-tag flex gap-1">
           <span>
-            <i className="fa-light fa-tag" />
+            <GoTag />
           </span>
           {/* <a href="#">Tablet,</a>
           <a href="#">News</a> */}
           <a href="#">{blogIsOf}</a>
-          <a href="#">{blogType}</a>
+          <a href="#">,{blogType}</a>
         </div>
         <p>
          {blogDescription}

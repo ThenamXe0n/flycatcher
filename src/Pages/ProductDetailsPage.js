@@ -1,16 +1,36 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import HeaderTop from "../components/header/HeaderTop";
+import RangeCount from "../components/UiComponents/RangeCount";
 import NavBar from "../components/Navigation/NavBar";
 import Breadcrums from "../components/Navigation/Breadcrums";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { FaRegStar } from "react-icons/fa";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../features/Auth/AuthSlice";
+import { addToCartAsync, addToWishlistAsync } from "../features/Cart/CartSlice";
+import Cookies from "js-cookie";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const cartNotify = () =>
+    toast.success("Item is been added to cart successfully", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+    });
+
 const ProductDetailsPage = () => {
   const params = useParams();
   const { register, handleSubmit } = useForm();
+  const [quantity,setQuantity] = useState(1);
+  console.log(quantity);
   const [productRating, setProductRating] = useState([
     {
       _id: "65bf8b90bc7771675774e916",
@@ -51,23 +71,46 @@ const ProductDetailsPage = () => {
     stock: 0,
     productid: "65b0da8aa69c3e63dbe756ed",
   });
+  const dispatch = useDispatch();
+  const Navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user.userId;
+  const userId = Cookies.get("userID");
+  const loginStatus = Cookies.get("UserLoggedIn");
   console.log(product.product);
   const rating = product.rating;
 
   const addToCart = () => {
-   axios
-      .post("http://localhost:8080/api/cart/add", {
-        user: userId,
-        product: product.productid,
-      })
-      .then((res) => {const result = JSON.stringify(res.data);
-        alert(`${result}`);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+    if (!userId || !user || !loginStatus || loginStatus === "no") {
+      Navigate("/login");
+    } else {
+      console.log("clicked");
+      dispatch(addToCartAsync({ product: product.productid, user: userId,quantity:quantity }));
+      cartNotify()
+      console.log(product.productid);
+      console.log(userId);
+    }
+
+    //  axios
+    //     .post("http://localhost:8080/api/cart/add", {
+    //       user: userId,
+    //       product: product.productid,
+    //     })
+    //     .then((res) => {const result = JSON.stringify(res.data);
+    //       alert(`${result}`);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error.message);
+    //     });
+  };
+  const addToWishlist = () => {
+    if (!userId || !user || !loginStatus || loginStatus === "no") {
+      Navigate("/login");
+    } else {
+      dispatch(
+        addToWishlistAsync({ product: product.productid,quantity:quantity, user: userId })
+      );
+      cartNotify()
+    }
   };
 
   const onSubmit = (data) => {
@@ -250,7 +293,7 @@ const ProductDetailsPage = () => {
                     <div className="tp-product-details-category">
                       <span>{product.category}</span>
                     </div>
-                    <h3 className="tp-product-details-title">
+                    <h3 className="tp-product-details-title uppercase">
                       {product.product}
                     </h3>
                     {/* inventory details */}
@@ -522,7 +565,8 @@ const ProductDetailsPage = () => {
                       <div className="tp-product-details-action-item-wrapper d-flex align-items-center">
                         <div className="tp-product-details-quantity">
                           <div className="tp-product-quantity mb-15 mr-15">
-                            <span className="tp-cart-minus">
+                         <RangeCount quantity={1} getRangeValue={(value)=>setQuantity(value)} />
+                            {/* <span className="tp-cart-minus">
                               <svg
                                 width={11}
                                 height={2}
@@ -567,11 +611,14 @@ const ProductDetailsPage = () => {
                                   strokeLinejoin="round"
                                 />
                               </svg>
-                            </span>
+                            </span> */}
                           </div>
                         </div>
                         <div className="tp-product-details-add-to-cart mb-15 w-100">
-                          <button className="tp-product-details-add-to-cart-btn w-100" onClick={addToCart}>
+                          <button
+                            className="tp-product-details-add-to-cart-btn w-100"
+                            onClick={() => addToCart()}
+                          >
                             Add To Cart
                           </button>
                         </div>
@@ -634,6 +681,7 @@ const ProductDetailsPage = () => {
                         Compare
                       </button>
                       <button
+                        onClick={() => addToWishlist()}
                         type="button"
                         className="tp-product-details-action-sm-btn flex"
                       >

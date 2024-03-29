@@ -7,12 +7,13 @@ import Footer from '../components/Footer'
 import NavBar from '../components/Navigation/NavBar'
 import HeaderTop from '../components/header/HeaderTop'
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 
 const LoginPage = () => {
   const Navigate = useNavigate();
   useEffect(()=>{
-const user = localStorage.getItem("user")
+const user = Cookies.get("token")
 if(user){
   Navigate("/")
 }

@@ -1,12 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import Breadcrums from "../components/Navigation/Breadcrums";
 import NavBar from "../components/Navigation/NavBar";
 import Footer from "../components/Footer";
+import { useForm } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
+import { FaInstagram } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
+import { FaFacebookF } from "react-icons/fa";
 
 const ContactPage = () => {
+  const [inqueryMessage, setInqueryMessage] = useState(null);
+  const [saveDetailsChecked, setSaveDetailsChecked] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const saveDetailsOfInquisitive = (checked, data) => {
+    if (checked === true) {
+      localStorage.setItem("InquisitiveName", `${data.name}`);
+      localStorage.setItem("InquisitiveEmail", `${data.email}`);
+    } else {
+      return;
+    }
+  };
+  const userName = localStorage.getItem("InquisitiveName");
+  const userEmail = localStorage.getItem("InquisitiveName");
+
+  const sendInqueryMesssage = (data) => {
+    console.log(data);
+    saveDetailsOfInquisitive(saveDetailsChecked, data);
+    alert(
+      `${data.name} your inquery has been submitted Successfully. will get back to you soon.`
+    );
+  };
+
   return (
     <>
-    <NavBar />
+      <NavBar />
       <Breadcrums
         title={"keep In Touch With US"}
         mainPage={"home"}
@@ -18,22 +50,34 @@ const ContactPage = () => {
             <div className="row">
               <div className="col-xl-9 col-lg-8">
                 <div className="tp-contact-wrapper">
-                  <h3 className="tp-contact-title">Sent A Message</h3>
+                  <h3 className="tp-contact-title">
+                    Fill up below form will get to you as soon.
+                  </h3>
                   <div className="tp-contact-form">
                     <form
                       id="contact-form"
-                      action="assets/mail.html"
-                      method="POST"
+                      // action="assets/mail.html"
+                      // method="POST"
+                      onSubmit={handleSubmit(sendInqueryMesssage)}
                     >
                       <div className="tp-contact-input-wrapper">
                         <div className="tp-contact-input-box">
                           <div className="tp-contact-input">
                             <input
+                              {...register("name", {
+                                required:
+                                  "*Name is required.please enter your Name.",
+                              })}
                               name="name"
                               id="name"
                               type="text"
-                              placeholder="Shahnewaz Sakil"
+                              placeholder="Enter Your Full Name"
+                              defaultValue={`${userName}`}
                             />
+                            <div className="text-red-600 flex flex-row items-center gap-1 text-[1.3rem]">
+                              {" "}
+                              <ErrorMessage errors={errors} name="name" />{" "}
+                            </div>
                           </div>
                           <div className="tp-contact-input-title">
                             <label htmlFor="name">Your Name</label>
@@ -42,11 +86,23 @@ const ContactPage = () => {
                         <div className="tp-contact-input-box">
                           <div className="tp-contact-input">
                             <input
+                              {...register("email", {
+                                required: "*email is required",
+                                pattern: {
+                                  value: /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
+                                  message: "email not valid",
+                                },
+                              })}
                               name="email"
                               id="email"
                               type="email"
                               placeholder="shofy@mail.com"
+                              defaultValue={`${userEmail}`}
                             />
+                            <div className="text-red-600 flex flex-row items-center gap-1 text-[1.3rem]">
+                              {" "}
+                              <ErrorMessage errors={errors} name="email" />{" "}
+                            </div>
                           </div>
                           <div className="tp-contact-input-title">
                             <label htmlFor="email">Your Email</label>
@@ -55,11 +111,18 @@ const ContactPage = () => {
                         <div className="tp-contact-input-box">
                           <div className="tp-contact-input">
                             <input
+                              {...register("subject", {
+                                required: "*Subject can be left empty",
+                              })}
                               name="subject"
                               id="subject"
                               type="text"
                               placeholder="Write your subject"
+                              defaultValue={"Inquery"}
                             />
+                            <div className="text-red-600 flex flex-row items-center gap-1 text-[1.3rem]">
+                              <ErrorMessage errors={errors} name="subject" />
+                            </div>
                           </div>
                           <div className="tp-contact-input-title">
                             <label htmlFor="subject">Subject</label>
@@ -68,11 +131,22 @@ const ContactPage = () => {
                         <div className="tp-contact-input-box">
                           <div className="tp-contact-input">
                             <textarea
+                              {...register("message", {
+                                required:
+                                  "*This field need to be filled.Cant be left Empty",
+                              })}
                               id="message"
                               name="message"
                               placeholder="Write your message here..."
                               defaultValue={""}
                             />
+                            <div className="text-red-600 flex flex-row items-center gap-1 text-[1.3rem]">
+                              {" "}
+                              <ErrorMessage
+                                errors={errors}
+                                name="message"
+                              />{" "}
+                            </div>
                           </div>
                           <div className="tp-contact-input-title">
                             <label htmlFor="message">Your Message</label>
@@ -81,7 +155,13 @@ const ContactPage = () => {
                       </div>
                       <div className="tp-contact-suggetions mb-20">
                         <div className="tp-contact-remeber">
-                          <input id="remeber" type="checkbox" />
+                          <input
+                            id="remeber"
+                            type="checkbox"
+                            onChange={(e) => {
+                              setSaveDetailsChecked(e.target.checked);
+                            }}
+                          />
                           <label htmlFor="remeber">
                             Save my name, email, and website in this browser for
                             the next time I comment.
@@ -152,13 +232,13 @@ const ContactPage = () => {
                         </h4>
                         <div className="tp-contact-social-icon">
                           <a href="#">
-                            <i className="fa-brands fa-facebook-f" />
+                           <FaFacebookF />
                           </a>
                           <a href="#">
-                            <i className="fa-brands fa-twitter" />
+                           <FaWhatsapp />
                           </a>
                           <a href="#">
-                            <i className="fa-brands fa-linkedin-in" />
+                            <FaInstagram />
                           </a>
                         </div>
                       </div>

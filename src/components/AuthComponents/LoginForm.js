@@ -3,32 +3,58 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import PasswordInputBox from "./PasswordInputBox";
+import { useDispatch, useSelector } from "react-redux";
+import { userLoginAsync } from "../../features/Auth/AuthSlice";
+import Cookies from "js-cookie";
 
 const LoginForm = () => {
   const [userData, setuserData] = useState();
-  const [user,setUser] = useState(0)
-  const Navigate = useNavigate()
+  const [user, setUser] = useState(0);
+  const Navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
+
   const onSubmit = (data) => {
-    console.log(data)
+    console.log(data);
+    //   const config = {
+    //     headers: { Authorization: `Bearer ${localStorage.getItem("token")}`, }
+    // };
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}`, }
-  };
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    };
     axios
-      .post("http://localhost:8080/api/login", {
-        email:data.email,
-        password:data.password,
-      },config)
-      .then((res) => {console.log(res);localStorage.setItem("token",`${res.data.token}`);setUser(res.data.token);const userInfo = JSON.stringify(res.data.userdata) ;localStorage.setItem("user",`${userInfo}`);Navigate('/user')})
-      .catch((err) => {console.error(err);alert("invalid Credentials")});
+      .post(
+        "http://localhost:8080/api/login",
+        {
+          email: data.email,
+          password: data.password,
+        },
+        config
+      )
+      .then((res) => {
+        const userid = res.data.userdata.userId;
+        setUser(res.data.token);
+        Cookies.set("token", `${res.data.token}`);
+        localStorage.setItem("token", `${res.data.token}`);
+        const userInfo = JSON.stringify(res.data.userdata);
+        localStorage.setItem("user", `${userInfo}`);
+        Cookies.set("UserLoggedIn","yes");
+        Cookies.set("userID", `${userid}`);
+        Navigate("/user");
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("invalid Credentials");
+      });
+    dispatch(userLoginAsync({ email: data.email, password: data.password }));
   };
   return (
-   
     <section className="tp-login-area pb-140 p-relative z-index-1 fix">
       <div className="tp-login-shape">
         <img
@@ -110,7 +136,7 @@ const LoginForm = () => {
                       <label htmlFor="email">Your Email</label>
                     </div>
                   </div>
-                <PasswordInputBox register={register} />
+                  <PasswordInputBox register={register} />
                   <div className="tp-login-suggetions d-sm-flex align-items-center justify-content-between mb-20">
                     <div className="tp-login-remeber">
                       <input id="remeber" type="checkbox" />
@@ -121,14 +147,12 @@ const LoginForm = () => {
                     </div>
                   </div>
                   <div className="tp-login-bottom">
-
                     <button
                       type="submit"
                       className="tp-login-btn w-100 bg-black"
                     >
                       Login
                     </button>
-                    
                   </div>
                 </form>
               </div>
@@ -137,7 +161,6 @@ const LoginForm = () => {
         </div>
       </div>
     </section>
-  
   );
 };
 

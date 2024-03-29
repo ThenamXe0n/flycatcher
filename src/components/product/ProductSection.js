@@ -5,7 +5,7 @@ import ProductGrid from "./ProductGrid";
 const ProductSection = ({heading}) => {
   return (
     <section className="tp-product-area pb-55">
-      <div class="container">
+      <div className="container">
         <ProductSectionHeader title={heading} />
         <ProductGrid />
       </div>

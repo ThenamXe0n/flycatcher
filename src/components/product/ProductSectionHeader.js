@@ -17,9 +17,9 @@ const ProductSectionHeader = ({title}) => {
             <path
               d="M112 23.275C1.84952 -10.6834 -7.36586 1.48086 7.50443 32.9053"
               stroke="currentColor"
-              stroke-width="4"
-              stroke-miterlimit="3.8637"
-              stroke-linecap="round"
+              strokeWidth="4"
+              strokeMiterlimit="3.8637"
+              strokeLinecap="round"
             />
           </svg>
         </h3>
@@ -57,9 +57,9 @@ const ProductSectionHeader = ({title}) => {
                   <path
                     d="M1 8.97127C11.6061 -5.48521 33 3.99996 51 11.4635"
                     stroke="currentColor"
-                    stroke-width="2"
-                    stroke-miterlimit="3.8637"
-                    stroke-linecap="round"
+                    strokeWidth="2"
+                    strokeMiterlimit="3.8637"
+                    strokeLinecap="round"
                   />
                 </svg>
               </span>
@@ -88,9 +88,9 @@ const ProductSectionHeader = ({title}) => {
                   <path
                     d="M1 8.97127C11.6061 -5.48521 33 3.99996 51 11.4635"
                     stroke="currentColor"
-                    stroke-width="2"
-                    stroke-miterlimit="3.8637"
-                    stroke-linecap="round"
+                    strokeWidth="2"
+                    strokeMiterlimit="3.8637"
+                    strokeLinecap="round"
                   />
                 </svg>
               </span>
@@ -119,9 +119,9 @@ const ProductSectionHeader = ({title}) => {
                   <path
                     d="M1 8.97127C11.6061 -5.48521 33 3.99996 51 11.4635"
                     stroke="currentColor"
-                    stroke-width="2"
-                    stroke-miterlimit="3.8637"
-                    stroke-linecap="round"
+                    strokeWidth="2"
+                    strokeMiterlimit="3.8637"
+                    strokeLinecap="round"
                   />
                 </svg>
               </span>
