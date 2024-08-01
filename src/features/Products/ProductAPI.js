@@ -20,7 +20,7 @@ export function fetchAllProducts(filter,sort,pagination,admin) {
   }
   return new Promise(async (resolve) => {
     const response = await fetch(
-      "http://localhost:8080/api/product/allproducts?" + queryString
+      "https://flycatcher-backend.vercel.app/api/product/allproducts?" + queryString
     );
     const data = await response.json();
     resolve({ data: { product: data.product, totalItems: data.totalProducts } });
