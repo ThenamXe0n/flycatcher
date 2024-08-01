@@ -12,24 +12,35 @@ import Footer from "../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../features/Auth/AuthSlice";
 import { originPath } from "../assets/js/main";
+import {filterProduct} from "../helperFunctions/productFilter";
 import {
   fetchAllProductsAsync,
   selectAllProducts,
   selectTotalProducts,
 } from "../features/Products/ProductSlice";
 import { ITEMS_PER_PAGE } from "../app/constant";
+import HeaderTop from "../components/header/HeaderTop";
 
 const ShopPage = () => {
   const [viewProductStyle, setViewProductStyle] = useState("Grid");
   const [category, setCategory] = useState([]);
+  const totalProductsCount = useSelector(selectTotalProducts);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [allProduct, setAllProduct] = useState([]);
+  const [productsPerPage, setProductsPerPage] = useState(ITEMS_PER_PAGE);
   const dispatch = useDispatch();
   const Location = useLocation();
-  const totalItems = useSelector(selectTotalProducts);
+  const [totalItems, setTotalItems] = useState(useSelector(selectTotalProducts));
   const [page, setPage] = useState(1);
+  const productItems = useSelector(selectAllProducts);
+  const [filter, setfilter] = useState([]);
+  console.log(filter);
   const handlePage = (page) => {
     console.log({ page });
     setPage(page);
   };
+
+  // console.log(filterItemCount.length)
 
   useEffect(() => {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
@@ -40,30 +51,46 @@ const ShopPage = () => {
         setCategory(response.data);
       });
   }, [dispatch, page]);
- 
 
   useEffect(() => {
     setPage(1);
     originPath();
   }, [totalItems]);
-  // useEffect(() => {
-  //   axios.get("http://localhost:8080/api/product/allproducts").then((response) => {
-
-  //   });
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/product/allproducts")
+      .then((response) => {
+        setAllProduct(response.data.product);
+      })
+      .catch((error) => console.log(error.message));
+  }, []);
   //   axios.get("http://localhost:8080/api/category/allcategory").then((response) => {
   //     setCategory(response.data);
   //   });
   // }, []);
 
-  const productItems = useSelector(selectAllProducts);
-  const [filter,setfilter] = useState([])
-  console.log(filter)
-  
-
+  useEffect(() => {
+    function paginationPageResetter() {
+      if (filter.length >= 1) {
+        const filterItemCount = allProduct.filter((product) =>
+          filter.includes(product.category)
+        ).length;
+        setTotalItems(filterItemCount);
+        setProductsPerPage(ITEMS_PER_PAGE);
+      }
+      if (filter.length === 0) {
+        setProductsPerPage(ITEMS_PER_PAGE);
+        setTotalItems(totalProductsCount);
+      }
+    }
+    paginationPageResetter();
+    console.log("hellow");
+  }, [filter]);
   return (
     <>
       {productItems.length != 0 || null ? (
         <>
+        <HeaderTop />
           <NavBar />
           {console.log(Location.pathname)}
           {console.log(viewProductStyle)}
@@ -78,47 +105,6 @@ const ShopPage = () => {
               <div className="row">
                 <div className="col-xl-3 col-lg-4">
                   <div className="tp-shop-sidebar mr-10">
-                    {/* filter */}
-                    <div className="tp-shop-widget mb-35">
-                      <h3 className="tp-shop-widget-title no-border">
-                        Price Filter
-                      </h3>
-                      <div className="tp-shop-widget-content">
-                        <div className="tp-shop-widget-filter">
-                          <div id="slider-range" className="mb-10" />
-                          <div className="tp-shop-widget-filter-info d-flex align-items-center justify-content-between">
-                            <span className="input-range">
-                              <input type="text" id="amount" readOnly="" />
-                            </span>
-                            <button
-                              className="tp-shop-widget-filter-btn"
-                              type="button"
-                            >
-                              Filter
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* status */}
-                    <div className="tp-shop-widget mb-50">
-                      <h3 className="tp-shop-widget-title">Product Status</h3>
-                      <div className="tp-shop-widget-content">
-                        <div className="tp-shop-widget-checkbox">
-                          <ul className="filter-items filter-checkbox">
-                            <li className="filter-item checkbox">
-                              <input id="on_sale" type="checkbox" />
-                              <label htmlFor="on_sale">On sale</label>
-                            </li>
-                            <li className="filter-item checkbox">
-                              <input id="in_stock" type="checkbox" />
-                              <label htmlFor="in_stock">In Stock</label>
-                            </li>
-                          </ul>
-                          {/* .filter-items */}
-                        </div>
-                      </div>
-                    </div>
                     {/* categories */}
                     <div className="tp-shop-widget mb-50">
                       <h3 className="tp-shop-widget-title">Categories</h3>
@@ -131,629 +117,24 @@ const ShopPage = () => {
                                   type="checkbox"
                                   name="category"
                                   value={item.value}
-                                  onChange={(e)=>{if(e.target.checked){filter.push({category:e.target.value})}if(!e.target.checked){filter.pop({category:e.target.value})};console.log(filter)}}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setfilter([...filter, e.target.value]);
+                                    }
+                                    if (!e.target.checked) {
+                                      const newArr = filter.filter(
+                                        (item) => item != e.target.value
+                                      );
+                                      setfilter(newArr);
+                                    }
+                                    console.log(filter);
+                                  }}
                                 />
                                 <label>{item.category}</label>
                                 {/* {item.category} <span>{category.length}</span> */}
                               </li>
                             ))}
-                            {/* <li>
-                          <a href="#">
-                            Leather <span>10</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            Classic Watch <span>18</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            Leather Man Wacth <span>22</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            Trending Watch <span>17</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            Google <span>22</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            Woman Wacth <span>14</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            Tables <span>19</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            Electronics <span>29</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            Phones <span>05</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            Grocery <span>14</span>
-                          </a>
-                        </li> */}
                           </ul>
-                        </div>
-                      </div>
-                    </div>
-                    {/* color */}
-                    <div className="tp-shop-widget mb-50">
-                      <h3 className="tp-shop-widget-title">Filter by Color</h3>
-                      <div className="tp-shop-widget-content">
-                        <div className="tp-shop-widget-checkbox-circle-list">
-                          <ul>
-                            <li>
-                              <div className="tp-shop-widget-checkbox-circle">
-                                <input type="checkbox" id="red" />
-                                <label htmlFor="red">Red</label>
-                                <span
-                                  data-bg-color="#FF401F"
-                                  className="tp-shop-widget-checkbox-circle-self"
-                                />
-                              </div>
-                              <span className="tp-shop-widget-checkbox-circle-number">
-                                8
-                              </span>
-                            </li>
-                            <li>
-                              <div className="tp-shop-widget-checkbox-circle">
-                                <input type="checkbox" id="dark_blue" />
-                                <label htmlFor="dark_blue">Dark Blue</label>
-                                <span
-                                  data-bg-color="#4666FF"
-                                  className="tp-shop-widget-checkbox-circle-self"
-                                />
-                              </div>
-                              <span className="tp-shop-widget-checkbox-circle-number">
-                                14
-                              </span>
-                            </li>
-                            <li>
-                              <div className="tp-shop-widget-checkbox-circle">
-                                <input type="checkbox" id="oragnge" />
-                                <label htmlFor="oragnge">Orange</label>
-                                <span
-                                  data-bg-color="#FF9E2C"
-                                  className="tp-shop-widget-checkbox-circle-self"
-                                />
-                              </div>
-                              <span className="tp-shop-widget-checkbox-circle-number">
-                                18
-                              </span>
-                            </li>
-                            <li>
-                              <div className="tp-shop-widget-checkbox-circle">
-                                <input type="checkbox" id="purple" />
-                                <label htmlFor="purple">Purple</label>
-                                <span
-                                  data-bg-color="#B615FD"
-                                  className="tp-shop-widget-checkbox-circle-self"
-                                />
-                              </div>
-                              <span className="tp-shop-widget-checkbox-circle-number">
-                                23
-                              </span>
-                            </li>
-                            <li>
-                              <div className="tp-shop-widget-checkbox-circle">
-                                <input type="checkbox" id="yellow" />
-                                <label htmlFor="yellow">Yellow</label>
-                                <span
-                                  data-bg-color="#FFD747"
-                                  className="tp-shop-widget-checkbox-circle-self"
-                                />
-                              </div>
-                              <span className="tp-shop-widget-checkbox-circle-number">
-                                17
-                              </span>
-                            </li>
-                            <li>
-                              <div className="tp-shop-widget-checkbox-circle">
-                                <input type="checkbox" id="green" />
-                                <label htmlFor="green">Green</label>
-                                <span
-                                  data-bg-color="#41CF0F"
-                                  className="tp-shop-widget-checkbox-circle-self"
-                                />
-                              </div>
-                              <span className="tp-shop-widget-checkbox-circle-number">
-                                15
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    {/* product rating */}
-                    <div className="tp-shop-widget mb-50">
-                      <h3 className="tp-shop-widget-title">
-                        Top Rated Products
-                      </h3>
-                      <div className="tp-shop-widget-content">
-                        <div className="tp-shop-widget-product">
-                          <div className="tp-shop-widget-product-item d-flex align-items-center">
-                            <div className="tp-shop-widget-product-thumb">
-                              <a href="product-details.html">
-                                <img
-                                  src="assets/img/product/shop/sm/shop-sm-1.jpg"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <div className="tp-shop-widget-product-content">
-                              <div className="tp-shop-widget-product-rating-wrapper d-flex align-items-center">
-                                <div className="tp-shop-widget-product-rating">
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                </div>
-                                <div className="tp-shop-widget-product-rating-number">
-                                  <span>(4.2)</span>
-                                </div>
-                              </div>
-                              <h4 className="tp-shop-widget-product-title">
-                                <a href="product-details.html">
-                                  Smart watches wood...
-                                </a>
-                              </h4>
-                              <div className="tp-shop-widget-product-price-wrapper">
-                                <span className="tp-shop-widget-product-price">
-                                  $150.00
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="tp-shop-widget-product-item d-flex align-items-center">
-                            <div className="tp-shop-widget-product-thumb">
-                              <a href="product-details.html">
-                                <img
-                                  src="assets/img/product/shop/sm/shop-sm-2.jpg"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <div className="tp-shop-widget-product-content">
-                              <div className="tp-shop-widget-product-rating-wrapper d-flex align-items-center">
-                                <div className="tp-shop-widget-product-rating">
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                </div>
-                                <div className="tp-shop-widget-product-rating-number">
-                                  <span>(4.5)</span>
-                                </div>
-                              </div>
-                              <h4 className="tp-shop-widget-product-title">
-                                <a href="product-details.html">
-                                  Decoration for panda.
-                                </a>
-                              </h4>
-                              <div className="tp-shop-widget-product-price-wrapper">
-                                <span className="tp-shop-widget-product-price">
-                                  $120.00
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="tp-shop-widget-product-item d-flex align-items-center">
-                            <div className="tp-shop-widget-product-thumb">
-                              <a href="product-details.html">
-                                <img
-                                  src="assets/img/product/shop/sm/shop-sm-3.jpg"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <div className="tp-shop-widget-product-content">
-                              <div className="tp-shop-widget-product-rating-wrapper d-flex align-items-center">
-                                <div className="tp-shop-widget-product-rating">
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                </div>
-                                <div className="tp-shop-widget-product-rating-number">
-                                  <span>(3.5)</span>
-                                </div>
-                              </div>
-                              <h4 className="tp-shop-widget-product-title">
-                                <a href="product-details.html">
-                                  Trending Watch for Man
-                                </a>
-                              </h4>
-                              <div className="tp-shop-widget-product-price-wrapper">
-                                <span className="tp-shop-widget-product-price">
-                                  $99.00
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="tp-shop-widget-product-item d-flex align-items-center">
-                            <div className="tp-shop-widget-product-thumb">
-                              <a href="product-details.html">
-                                <img
-                                  src="assets/img/product/shop/sm/shop-sm-4.jpg"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <div className="tp-shop-widget-product-content">
-                              <div className="tp-shop-widget-product-rating-wrapper d-flex align-items-center">
-                                <div className="tp-shop-widget-product-rating">
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span>
-                                    <svg
-                                      width={12}
-                                      height={12}
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M6 0L7.854 3.756L12 4.362L9 7.284L9.708 11.412L6 9.462L2.292 11.412L3 7.284L0 4.362L4.146 3.756L6 0Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                  </span>
-                                </div>
-                                <div className="tp-shop-widget-product-rating-number">
-                                  <span>(4.8)</span>
-                                </div>
-                              </div>
-                              <h4 className="tp-shop-widget-product-title">
-                                <a href="product-details.html">
-                                  Minimal Backpack.
-                                </a>
-                              </h4>
-                              <div className="tp-shop-widget-product-price-wrapper">
-                                <span className="tp-shop-widget-product-price">
-                                  $165.00
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* brand */}
-                    <div className="tp-shop-widget mb-50">
-                      <h3 className="tp-shop-widget-title">Popular Brands</h3>
-                      <div className="tp-shop-widget-content ">
-                        <div className="tp-shop-widget-brand-list d-flex align-items-center justify-content-between flex-wrap">
-                          <div className="tp-shop-widget-brand-item">
-                            <a href="#">
-                              <img
-                                src="assets/img/product/shop/brand/logo_01.png"
-                                alt=""
-                              />
-                            </a>
-                          </div>
-                          <div className="tp-shop-widget-brand-item">
-                            <a href="#">
-                              <img
-                                src="assets/img/product/shop/brand/logo_02.png"
-                                alt=""
-                              />
-                            </a>
-                          </div>
-                          <div className="tp-shop-widget-brand-item">
-                            <a href="#">
-                              <img
-                                src="assets/img/product/shop/brand/logo_03.png"
-                                alt=""
-                              />
-                            </a>
-                          </div>
-                          <div className="tp-shop-widget-brand-item">
-                            <a href="#">
-                              <img
-                                src="assets/img/product/shop/brand/logo_04.png"
-                                alt=""
-                              />
-                            </a>
-                          </div>
-                          <div className="tp-shop-widget-brand-item">
-                            <a href="#">
-                              <img
-                                src="assets/img/product/shop/brand/logo_05.png"
-                                alt=""
-                              />
-                            </a>
-                          </div>
-                          <div className="tp-shop-widget-brand-item">
-                            <a href="#">
-                              <img
-                                src="assets/img/product/shop/brand/logo_06.png"
-                                alt=""
-                              />
-                            </a>
-                          </div>
-                          <div className="tp-shop-widget-brand-item">
-                            <a href="#">
-                              <img
-                                src="assets/img/product/shop/brand/logo_07.png"
-                                alt=""
-                              />
-                            </a>
-                          </div>
-                          <div className="tp-shop-widget-brand-item">
-                            <a href="#">
-                              <img
-                                src="assets/img/product/shop/brand/logo_08.png"
-                                alt=""
-                              />
-                            </a>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -872,13 +253,13 @@ const ShopPage = () => {
                                 <p className="text-sm text-gray-700">
                                   Showing{" "}
                                   <span className="font-medium">
-                                    {(page - 1) * ITEMS_PER_PAGE + 1}
+                                    {(page - 1) * productsPerPage + 1}
                                   </span>{" "}
                                   to{" "}
                                   <span className="font-medium">
-                                    {page * ITEMS_PER_PAGE > totalItems
+                                    {page * productsPerPage > totalItems
                                       ? totalItems
-                                      : page * ITEMS_PER_PAGE}
+                                      : page * productsPerPage}
                                   </span>{" "}
                                   of{" "}
                                   <span className="font-medium">
@@ -985,88 +366,26 @@ const ShopPage = () => {
                               {/* product grid cards */}
 
                               {/* dynamic cards area map  */}
-                              {productItems.map((item, index) => (
-                             
-                                  <ProductGridCard
-                                    id={item.productid}
-                                    productName={item.product}
-                                    productBrand={item.brand}
-                                    productCategory={item.category}
-                                    productFinalPrice={item.finalprice}
-                                    productImg={item.thumbnail}
-                                    productMRP={item.price}
-                                    rating={item.rating}
-                                    discription={item.discription}
-                                  />
-                                
+                              {(filter.length >= 1
+                                ? filterProduct(allProduct,filter)
+                                : productItems
+                              )?.map((item, index) => (
+                                <ProductGridCard
+                                  id={item.productid}
+                                  productName={item.product}
+                                  productBrand={item.brand}
+                                  productCategory={item.category}
+                                  productFinalPrice={item.finalprice}
+                                  productImg={item.thumbnail}
+                                  productMRP={item.price}
+                                  rating={item.rating}
+                                  discription={item.discription}
+                                />
                               ))}
 
                               {/* dynamic cards area map  */}
 
-                              {/* <ProductGridCard
-                            productName={"i watch"}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                          />
-                          <ProductGridCard
-                            productName={"i watch"}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                          />
-                          <ProductGridCard
-                            productName={"i watch"}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                          />
-                          <ProductGridCard
-                            productName={"i watch"}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                          />
-                          <ProductGridCard
-                            productName={"i watch"}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                          />
-                          <ProductGridCard
-                            productName={"i watch"}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                          />
-                          <ProductGridCard
-                            productName={"i watch"}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                          />
-                          <ProductGridCard
-                            productName={"i watch"}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                          /> */}
+                    
                               {/* product grid cards */}
                             </div>
                           ) : null}
@@ -1077,7 +396,12 @@ const ShopPage = () => {
                               {/* dynamic listcard map area  */}
                               {/* dynamic listcard map area  */}
 
-                              {productItems.map((item, index) => (
+                              {(filter.length >= 1
+                                ? allProduct.filter((product) =>
+                                    filter.includes(product.category)
+                                  )
+                                : productItems
+                              )?.map((item, index) => (
                                 <Link
                                   to={`${Path.PRODUCT_DETAILS}/${item.productid}`}
                                   key={index}
@@ -1096,126 +420,7 @@ const ShopPage = () => {
                                 </Link>
                               ))}
 
-                              {/* <ProductListCard
-                            productName={"i watch"}
-                            rating={3}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                            productDiscription={
-                              "this is product discription thuhjkahhsd khdskhsk khsdkhskd khdskhsdh lkhsls"
-                            }
-                          />
-                          <ProductListCard
-                            productName={"i watch"}
-                            rating={2}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                            productDiscription={
-                              "this is product discription thuhjkahhsd khdskhsk khsdkhskd khdskhsdh lkhsls"
-                            }
-                          />
-                          <ProductListCard
-                            productName={"i watch"}
-                            rating={1}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                            productDiscription={
-                              "this is product discription thuhjkahhsd khdskhsk khsdkhskd khdskhsdh lkhsls"
-                            }
-                          />
-                          <ProductListCard
-                            productName={"i watch"}
-                            rating={4}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                            productDiscription={
-                              "this is product discription thuhjkahhsd khdskhsk khsdkhskd khdskhsdh lkhsls"
-                            }
-                          />
-                          <ProductListCard
-                            productName={"i watch"}
-                            rating={5}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                            productDiscription={
-                              "this is product discription thuhjkahhsd khdskhsk khsdkhskd khdskhsdh lkhsls"
-                            }
-                          />
-                          <ProductListCard
-                            productName={"i watch"}
-                            rating={0}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                            productDiscription={
-                              "this is product discription thuhjkahhsd khdskhsk khsdkhskd khdskhsdh lkhsls"
-                            }
-                          />
-                          <ProductListCard
-                            productName={"i watch"}
-                            rating={3}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                            productDiscription={
-                              "this is product discription thuhjkahhsd khdskhsk khsdkhskd khdskhsdh lkhsls"
-                            }
-                          />
-                          <ProductListCard
-                            productName={"i watch"}
-                            productBrand={"Apple"}
-                            rating={5}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                            productDiscription={
-                              "this is product discription thuhjkahhsd khdskhsk khsdkhskd khdskhsdh lkhsls"
-                            }
-                          />
-                          <ProductListCard
-                            productName={"i watch"}
-                            productBrand={"Apple"}
-                            rating={4}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                            productDiscription={
-                              "this is product discription thuhjkahhsd khdskhsk khsdkhskd khdskhsdh lkhsls"
-                            }
-                          />
-                          <ProductListCard
-                            productName={"i watch"}
-                            rating={2}
-                            productBrand={"Apple"}
-                            productCategory={"watch"}
-                            productFinalPrice={"20000"}
-                            productImg={"assets/img/product/2/prodcut-1.jpg"}
-                            productMRP={"25000"}
-                            productDiscription={
-                              "this is product discription thuhjkahhsd khdskhsk khsdkhskd khdskhsdh lkhsls"
-                            }
-                          /> */}
+                             
                               {/* product list card */}
                             </div>
                           ) : null}
@@ -1237,6 +442,7 @@ const ShopPage = () => {
                     <div className="tp-shop-pagination mt-20">
                       <Pagination
                         page={page}
+                        itemPerPage={productsPerPage}
                         setPage={setPage}
                         handlePage={handlePage}
                         totalItems={totalItems}

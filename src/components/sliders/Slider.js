@@ -55,7 +55,7 @@ const Slider = () => {
                 <div className="col-xl-5 col-lg-6 col-md-6">
                   <div className="tp-slider-content p-relative z-index-1">
                     <span>
-                      Starting at <b>$274.00</b>
+                      Starting at <b>₹274.00</b>
                     </span>
                     <h3 className="tp-slider-title">
                       We are Best in Product Finishing
@@ -150,7 +150,7 @@ const Slider = () => {
                 <div className="col-xl-5 col-lg-6 col-md-6">
                   <div className="tp-slider-content p-relative z-index-1">
                     <span>
-                      Starting at <b>$999.00</b>
+                      Starting at <b>₹999.00</b>
                     </span>
                     <h3 className="tp-slider-title">
                       The best note book collection 2023
@@ -248,7 +248,7 @@ const Slider = () => {
                 <div className="col-xl-5 col-lg-6 col-md-6">
                   <div className="tp-slider-content p-relative z-index-1">
                     <span>
-                      Starting at <b>$999.00</b>
+                      Starting at <b>₹999.00</b>
                     </span>
                     <h3 className="tp-slider-title">
                       The best note book collection 2023

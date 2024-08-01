@@ -39,7 +39,10 @@ const NavBar = () => {
     setSearchVal(e.target.value);
     const ItemsArray = ProductItems;
     const filteredArray = ItemsArray.filter((item) => {
-      return item.product.toLocaleLowerCase().includes(searchVal);
+      return (
+        item.product?.includes(searchVal) ||
+        item?.category?.includes(searchVal)
+      );
     });
     console.log(filteredArray);
     console.log(items);
@@ -131,7 +134,7 @@ const NavBar = () => {
             </div>
 
             {/* categories dropdown list */}
-            <div className="offcanvas__category pb-40">
+            {/* <div className="offcanvas__category pb-40">
               <button className="tp-offcanvas-category-toggle">
                 <i className="fa-solid fa-bars" />
                 All Categories
@@ -615,20 +618,20 @@ const NavBar = () => {
                   </ul>
                 </nav>
               </div>
-            </div>
+            </div> */}
             {/* categories dropdown list */}
 
             <div className="tp-main-menu-mobile fix mb-40">
               <nav className="tp-main-menu-content">
                 <ul>
                   <li className="has-dropdown has-mega-menu">
-                    <a href="index.html">
+                    <Link to="/">
                       Home
                       <button className="dropdown-toggle-btn">
                         <i className="fa-regular fa-angle-right" />
                       </button>
-                    </a>
-                    <div className="home-menu tp-submenu tp-mega-menu">
+                    </Link>
+                    {/* <div className="home-menu tp-submenu tp-mega-menu">
                       <div className="row row-cols-1 row-cols-lg-4 row-cols-xl-5">
                         <div className="col">
                           <div className="home-menu-item ">
@@ -708,16 +711,16 @@ const NavBar = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </li>
                   <li className="has-dropdown has-mega-menu">
-                    <a href="shop.html">
+                    <Link to="/shop">
                       Shop
                       <button className="dropdown-toggle-btn">
                         <i className="fa-regular fa-angle-right" />
                       </button>
-                    </a>
-                    <div className="shop-mega-menu tp-submenu tp-mega-menu">
+                    </Link>
+                    {/* <div className="shop-mega-menu tp-submenu tp-mega-menu">
                       <div className="row">
                         <div className="col-lg-2">
                           <div className="shop-mega-menu-list">
@@ -865,15 +868,15 @@ const NavBar = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </li>
                   <li className="has-dropdown has-mega-menu ">
-                    <a href="shop.html">
-                      Products
+                    <Link to="/order">
+                      MyOrders
                       <button className="dropdown-toggle-btn">
                         <i className="fa-regular fa-angle-right" />
                       </button>
-                    </a>
+                    </Link>
                     <ul className="tp-submenu tp-mega-menu mega-menu-style-2">
                       {/* first col */}
                       <li className="has-dropdown">
@@ -1014,35 +1017,8 @@ const NavBar = () => {
                       </li>
                     </ul>
                   </li>
-                  <li>
-                    <a href="coupon.html">Coupons</a>
-                  </li>
                   <li className="has-dropdown">
-                    <a href="blog.html">
-                      Blog
-                      <button className="dropdown-toggle-btn">
-                        <i className="fa-regular fa-angle-right" />
-                      </button>
-                    </a>
-                    <ul className="tp-submenu">
-                      <li>
-                        <a href="blog.html">Blog Standard</a>
-                      </li>
-                      <li>
-                        <a href="blog-grid.html">Blog Grid</a>
-                      </li>
-                      <li>
-                        <a href="blog-list.html">Blog List</a>
-                      </li>
-                      <li>
-                        <a href="blog-details-2.html">
-                          Blog Details Full Width
-                        </a>
-                      </li>
-                      <li>
-                        <a href="blog-details.html">Blog Details</a>
-                      </li>
-                    </ul>
+                   <Link to="blog"> Blog </Link>
                   </li>
                   <li>
                     <Link to="/contact">Contact</Link>
@@ -1131,9 +1107,8 @@ const NavBar = () => {
                       <li className="has-dropdown has-mega-menu">
                         <Link className="flex" to="/">
                           Home
-                          <FaAngleDown className=" my-[6px]" />
                         </Link>
-                        <div className="home-menu tp-submenu tp-mega-menu">
+                        {/* <div className="home-menu tp-submenu tp-mega-menu">
                           <div className="row row-cols-1 row-cols-lg-4 row-cols-xl-5">
                             <div className="col">
                               <div className="home-menu-item ">
@@ -1215,14 +1190,13 @@ const NavBar = () => {
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </li>
                       <li className="has-dropdown has-mega-menu">
                         <Link to="/shop" className="flex">
                           Shop
-                          <FaAngleDown className=" my-[6px]" />
                         </Link>
-                        <div className="shop-mega-menu tp-submenu tp-mega-menu">
+                        {/* <div className="shop-mega-menu tp-submenu tp-mega-menu">
                           <div className="row">
                             <div className="col-lg-2">
                               <div className="shop-mega-menu-list">
@@ -1376,178 +1350,17 @@ const NavBar = () => {
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </li>
                       <li className="has-dropdown has-mega-menu ">
-                        <Link to="/shop" className="flex">
-                          Products
-                          <FaAngleDown className=" my-[6px]" />
+                        <Link to="/order" className="flex">
+                          My Orders
                         </Link>
-                        <ul className="tp-submenu tp-mega-menu mega-menu-style-2">
-                          {/* first col */}
-                          <li className="has-dropdown">
-                            <a href="shop.html" className="mega-menu-title">
-                              Shop Page
-                            </a>
-                            <ul className="tp-submenu">
-                              <li>
-                                <a href="shop-category.html">Only Categories</a>
-                              </li>
-                              <li>
-                                <a href="shop-filter-offcanvas.html">
-                                  Shop Grid
-                                </a>
-                              </li>
-                              <li>
-                                <a href="shop.html">Shop Grid with Sideber</a>
-                              </li>
-                              <li>
-                                <a href="shop-list.html">Shop List</a>
-                              </li>
-                              <li>
-                                <a href="shop-category.html">Categories</a>
-                              </li>
-                              <li>
-                                <a href="product-details.html">
-                                  Product Details
-                                </a>
-                              </li>
-                              <li>
-                                <a href="product-details-progress.html">
-                                  Product Details Progress
-                                </a>
-                              </li>
-                            </ul>
-                          </li>
-                          {/* third col */}
-                          <li className="has-dropdown">
-                            <a
-                              href="product-details.html"
-                              className="mega-menu-title"
-                            >
-                              Products
-                            </a>
-                            <ul className="tp-submenu">
-                              <li>
-                                <a href="product-details.html">
-                                  Product Simple
-                                </a>
-                              </li>
-                              <li>
-                                <a href="product-details-video.html">
-                                  With Video
-                                </a>
-                              </li>
-                              <li>
-                                <a href="product-details-countdown.html">
-                                  With Countdown Timer
-                                </a>
-                              </li>
-                              <li>
-                                <a href="product-details-presentation.html">
-                                  Product Presentation
-                                </a>
-                              </li>
-                              <li>
-                                <a href="product-details-swatches.html">
-                                  Variations Swatches
-                                </a>
-                              </li>
-                              <li>
-                                <a href="product-details-list.html">
-                                  List View
-                                </a>
-                              </li>
-                              <li>
-                                <a href="product-details-gallery.html">
-                                  Details Gallery
-                                </a>
-                              </li>
-                              <li>
-                                <a href="product-details-slider.html">
-                                  With Slider
-                                </a>
-                              </li>
-                            </ul>
-                          </li>
-                          {/* third col */}
-                          <li className="has-dropdown">
-                            <a href="shop.html" className="mega-menu-title">
-                              eCommerce
-                            </a>
-                            <ul className="tp-submenu">
-                              <li>
-                                <a href="cart.html">Shopping Cart</a>
-                              </li>
-                              <li>
-                                <a href="order.html">Track Your Order</a>
-                              </li>
-                              <li>
-                                <a href="compare.html">Compare</a>
-                              </li>
-                              <li>
-                                <a href="wishlist.html">Wishlist</a>
-                              </li>
-                              <li>
-                                <a href="checkout.html">Checkout</a>
-                              </li>
-                              <li>
-                                <a href="profile.html">My account</a>
-                              </li>
-                            </ul>
-                          </li>
-                          {/* second col */}
-                          <li className="has-dropdown">
-                            <a href="shop.html" className="mega-menu-title">
-                              More Pages
-                            </a>
-                            <ul className="tp-submenu">
-                              <li>
-                                <a href="about.html">About</a>
-                              </li>
-                              <li>
-                                <a href="login.html">Login</a>
-                              </li>
-                              <li>
-                                <a href="register.html">Register</a>
-                              </li>
-                              <li>
-                                <a href="forgot.html">Forgot Password</a>
-                              </li>
-                              <li>
-                                <a href="404.html">404 Error</a>
-                              </li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <Link to="coupon.html">Coupons</Link>
                       </li>
                       <li className="has-dropdown">
-                        <Link href="blog.html" className="flex">
+                        <Link to="/blog" className="flex">
                           Blog
-                          <FaAngleDown className=" my-[6px]" />
                         </Link>
-                        <ul className="tp-submenu">
-                          <li>
-                            <a href="blog.html">Blog Standard</a>
-                          </li>
-                          <li>
-                            <a href="blog-grid.html">Blog Grid</a>
-                          </li>
-                          <li>
-                            <a href="blog-list.html">Blog List</a>
-                          </li>
-                          <li>
-                            <a href="blog-details-2.html">
-                              Blog Details Full Width
-                            </a>
-                          </li>
-                          <li>
-                            <a href="blog-details.html">Blog Details</a>
-                          </li>
-                        </ul>
                       </li>
                       <li>
                         <Link to="/contact" className="flex">

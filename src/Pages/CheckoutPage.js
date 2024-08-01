@@ -18,6 +18,8 @@ import {
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import HeaderTop from "../components/header/HeaderTop";
 
 const stripePromise = loadStripe(
   "pk_test_51OlSaPSIRvECnq9ubEGJf1GCJ6ePclfTKykXzx3h5HQudY0Ljq276CeDIFB6YeGWuorQ6Vw1d0xAd1ujr0BxFXOW00IS3Nqa5n"
@@ -45,6 +47,9 @@ const CheckoutPage = () => {
       .then((res) => console.log(res))
       .catch((err) => console.log(err.messsage));
     setBillingDetails(data);
+    window.location.replace("/checkout")
+    toast.success("Delivery Address updated")
+
   };
 
   useEffect(() => {
@@ -71,6 +76,10 @@ const CheckoutPage = () => {
   console.log(paymentMode);
 
   const placeOrder = (data) => {
+    if(!checkoutItems.length){
+      toast.error("you cant place empty order!")
+      return;
+    }
     console.log(data);
     const body = {
       products: checkoutItems,
@@ -79,14 +88,15 @@ const CheckoutPage = () => {
       totalItems: checkoutItems.length,
     };
     console.log(body);
-    // axios.post(`http://localhost:8080/api/order/addorder`, {
-    //   products: checkoutItems,
-    //   user: userId,
-    //   totalamount: totalPrice,
-    //   totalItems: checkoutItems.length,
-    // });
-    // axios.post(`http://localhost:8080/api/cart/clear?user=${userId}`);
-    // alert("your order is place successfully");
+    axios.post(`http://localhost:8080/api/order/addorder`, {
+      products: checkoutItems,
+      user: userId,
+      totalamount: totalPrice,
+      totalItems: checkoutItems.length,
+    });
+    axios.post(`http://localhost:8080/api/cart/clear?user=${userId}`);
+    toast.success("your order is place successfully");
+    // window.location.replace("/order")
   };
 
 
@@ -110,6 +120,7 @@ const CheckoutPage = () => {
 
   return (
     <>
+    <HeaderTop />
       <NavBar />
       <Breadcrums title={"Checkout"} mainPage={"home"} subPage={"checkout"} />
       <section className="tp-checkout-area pb-120" data-bg-color="#EFF1F5">
@@ -180,7 +191,7 @@ const CheckoutPage = () => {
                                 required: "*this is required",
                               })}
                               placeholder="Enter billing customer name"
-                              defaultValue={userDetails[0]?.name}
+                              // {userDetails && (defaultValue={userDetails[0]?.name})}
                             />
                             <div className="text-red-600 flex flex-row items-center gap-1 text-[1.3rem]">
                               {" "}
@@ -198,7 +209,7 @@ const CheckoutPage = () => {
                               })}
                               type="text"
                               placeholder="United States (US)"
-                              defaultValue={userDetails[0]?.country}
+                              // defaultValue={userDetails[0]?.country}
                             />
                             <div className="text-red-600 flex flex-row items-center gap-1 text-[1.3rem]">
                               {" "}
@@ -220,7 +231,7 @@ const CheckoutPage = () => {
                                   "*Cant be left empty , Enter delivery address",
                               })}
                               placeholder="House number and street name"
-                              defaultValue={userDetails[0]?.street}
+                              // defaultValue={userDetails[0]?.street}
                             />
                             <div className="text-red-600 flex flex-row items-center gap-1 text-[1.3rem]">
                               {" "}
@@ -240,7 +251,7 @@ const CheckoutPage = () => {
                               })}
                               type="text"
                               placeholder="Apartment, suite, unit, etc. (optional)"
-                              defaultValue={userDetails[0]?.locality}
+                              // defaultValue={userDetails[0]?.locality}
                             />
                             <div className="text-red-600 flex flex-row items-center gap-1 text-[1.3rem]">
                               {" "}
@@ -261,7 +272,7 @@ const CheckoutPage = () => {
                               })}
                               type="text"
                               placeholder=""
-                              defaultValue={userDetails[0]?.city}
+                              // defaultValue={userDetails[0]?.city}
                             />
                             <div className="text-red-600 flex flex-row items-center gap-1 text-[1.3rem]">
                               {" "}
@@ -272,12 +283,12 @@ const CheckoutPage = () => {
                         <div className="col-md-6">
                           <div className="tp-checkout-input">
                             <label>State / County</label>
-                            <select defaultValue={userDetails[0]?.state}>
+                            <select >
                               <option>New York US</option>
                               <option>Berlin Germany</option>
                               <option>Paris France</option>
                               <option>Tokiyo Japan</option>
-                              <option>{userDetails[0]?.state}</option>
+                              {/* <option>{userDetails[0]?.state}</option> */}
                             </select>
                           </div>
                         </div>
@@ -291,7 +302,7 @@ const CheckoutPage = () => {
                               })}
                               type="text"
                               placeholder=""
-                              defaultValue={userDetails[0]?.pincode}
+                              // defaultValue={userDetails[0]?.pincode}
                             />
                             <div className="text-red-600 flex flex-row items-center gap-1 text-[1.3rem]">
                               {" "}
@@ -315,7 +326,7 @@ const CheckoutPage = () => {
                               })}
                               type="text"
                               placeholder=""
-                              defaultValue={userDetails[0]?.contact}
+                              // defaultValue={userDetails[0]?.contact}
                             />
                             <div className="text-red-600 flex flex-row items-center gap-1 text-[1.3rem]">
                               {" "}
@@ -339,7 +350,7 @@ const CheckoutPage = () => {
                               })}
                               type="email"
                               placeholder=""
-                              defaultValue={userDetails[0]?.email}
+                              // defaultValue={userDetails[0]?.email}
                             />
                             <div className="text-red-600 flex flex-row items-center gap-1 text-[1.3rem]">
                               {" "}
@@ -410,14 +421,14 @@ const CheckoutPage = () => {
                             {item.product.product}{" "}
                             <span> x {item.quantity}</span>
                           </p>
-                          <span>${item.product.finalprice}</span>
+                          <span>₹{item.product.finalprice}</span>
                         </li>
                         {/*item list */}
                         {/* subtotal */}
                         <li className="tp-order-info-list-subtotal">
                           <span>Subtotal</span>
                           <span>
-                            ${item.product.finalprice * item.quantity}
+                            ₹{item.product.finalprice * item.quantity}
                           </span>
                         </li>
                       </>
@@ -429,7 +440,7 @@ const CheckoutPage = () => {
                         <span>
                           <input id="flat_rate" type="radio" name="shipping" />
                           <label htmlFor="flat_rate">
-                            Flat rate: <span>$20.00</span>
+                            Flat rate: <span>₹20.00</span>
                           </label>
                         </span>
                         <span>
@@ -439,7 +450,7 @@ const CheckoutPage = () => {
                             name="shipping"
                           />
                           <label htmlFor="local_pickup">
-                            Local pickup: <span>$25.00</span>
+                            Local pickup: <span>₹25.00</span>
                           </label>
                         </span>
                         <span>
@@ -584,7 +595,7 @@ const CheckoutPage = () => {
                 </div>
                 <div className="tp-checkout-btn-wrapper">
                   <button className="tp-checkout-btn w-100" onClick={paymentMode==="card"?checkout:placeOrder}>
-                    Checkout
+                    Place Order
                   </button>
                 </div>
               </div>

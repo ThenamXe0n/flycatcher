@@ -56,17 +56,10 @@ const ProductGridCard = ({
   };
 
   const handleWishlist = async () => {
-    try {
-      const action = await dispatch(
-        addToWishlistAsync({ product: id, user: userid })
-      );
-      if (!action.payload.Error === false) {
-        errorNotify();
-      } else {
-        wishlistNotify();
-      }
+    try {dispatch(
+        addToWishlistAsync({ product: id, user: userid }))
     } catch (error) {
-      alert(error);
+      errorNotify();
     }
 
     // axios.post(`http://localhost:8080/api/wishlist/add`,{
@@ -454,10 +447,10 @@ const ProductGridCard = ({
             </div>
             <div className="tp-product-price-wrapper-2">
               <span className="tp-product-price-2 new-price">
-                ${productFinalPrice}
+                ₹{productFinalPrice}
               </span>
               <span className="tp-product-price-2 old-price">
-                ${productMRP}
+                ₹{productMRP}
               </span>
             </div>
           </div>

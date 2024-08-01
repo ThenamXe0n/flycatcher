@@ -133,18 +133,16 @@ const CartPage = () => {
  {/* quantity */}
                         <td className="tp-cart-price">
                           <div className="flex gap-1 justify-items-center items-center ">
-                         <p className="text-xl"> $ {item.product?.finalprice}</p> X <p className="text-green-600 font-semibold text-xl">{item.quantity}</p>
+                         <p className="text-xl"> ₹ {item.product?.finalprice}</p> X <p className="text-green-600 font-semibold text-xl">{item.quantity}</p>
                           </div>
                         </td>
                         
                         {/* price */}
                         <td className="tp-cart-price">
                           <span>
-                           <p className="text-xl"> ${item.quantity * item.product?.finalprice} </p>
+                           <p className="text-xl"> ₹{item.quantity * item.product?.finalprice} </p>
                           </span>
                         </td>
-                       
-                        {console.log(`quantity:${item.quantity}`)}
                         {/* <RangeCount quantity={item.quantity}/> */}
                         {/* <td className="tp-cart-add-to-cart">
                           <button
@@ -204,7 +202,7 @@ const CartPage = () => {
                 <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
                   <span className="tp-cart-checkout-top-title">Subtotal</span>
                   <span className="tp-cart-checkout-top-price">
-                    ${totalPrice}
+                    ₹{totalPrice}
                   </span>
                 </div>
                 <div className="tp-cart-checkout-shipping">
@@ -213,13 +211,13 @@ const CartPage = () => {
                     <div className="tp-cart-checkout-shipping-option">
                       <input id="flat_rate" type="radio" name="shipping" />
                       <label htmlFor="flat_rate">
-                        Flat rate: <span>$20.00</span>
+                        Flat rate: <span>₹20.00</span>
                       </label>
                     </div>
                     <div className="tp-cart-checkout-shipping-option">
                       <input id="local_pickup" type="radio" name="shipping" />
                       <label htmlFor="local_pickup">
-                        Local pickup: <span> $25.00</span>
+                        Local pickup: <span> ₹25.00</span>
                       </label>
                     </div>
                     <div className="tp-cart-checkout-shipping-option">
@@ -230,7 +228,7 @@ const CartPage = () => {
                 </div>
                 <div className="tp-cart-checkout-total d-flex align-items-center justify-content-between">
                   <span>Total</span>
-                  <span>${totalPrice}</span>
+                  <span>₹{totalPrice}</span>
                 </div>
                 <div className="tp-cart-checkout-proceed">
 

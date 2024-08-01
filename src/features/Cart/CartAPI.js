@@ -59,8 +59,9 @@ export function addToWishlist(item) {
       body: JSON.stringify(item),
       headers: { "content-type": "Application/json" },
     });
-    const data = response.json();
-    resolve({ data });
+    const data = await response.json();
+    const status = response.status
+    resolve({ data,status });
   });
 }
 

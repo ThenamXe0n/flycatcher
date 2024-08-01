@@ -10,6 +10,8 @@ const Path = {
   navbar: "/navbar",
   PRODUCT_DETAILS:"/product-details",
   CHECKOUT:"/checkout",
-  CONTACT:"/contact"
+  CONTACT:"/contact",
+  ORDER:"/order",
+  BLOG:"/blog",
 };
 export default Path;

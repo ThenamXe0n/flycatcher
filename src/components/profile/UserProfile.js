@@ -136,7 +136,7 @@ const UserProfile = () => {
               </TabList>
 
               {activeTab === "Profile" ? (
-                <UserProfileTab userImg={"../../assets/img/users/user-3.jpg"} />
+                <UserProfileTab  />
               ) : null}
               {activeTab === "My Orders" ? (
                 <UserOrderTab orderInfo={userOrder} />

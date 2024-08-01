@@ -9,4 +9,6 @@ export {default as NAVBAR_PATH} from '../components/Navigation/NavBar';
 export {default as PRODUCT_DETAIL_PATH} from '../Pages/ProductDetailsPage';
 export {default as CHECKOUT_PATH} from '../Pages/CheckoutPage';
 export {default as CONTACT_PATH} from '../Pages/ContactPage';
-
+export {default as ORDER_PATH} from "../Pages/OrderPage";
+export {default as BLOG_PAGE} from "../Pages/BlogPage"
+ 

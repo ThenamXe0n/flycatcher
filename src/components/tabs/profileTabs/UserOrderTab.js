@@ -46,8 +46,8 @@ const UserOrderTab = ({ orderInfo }) => {
             </thead>
             <tbody>
               {userOrder.map((order) => (
-                <tr key={order._id}>
-                  <th scope="row"> {order._id}</th>
+                <tr key={order?._id}>
+                  <th scope="row"> {order?._id}</th>
                   <div className="flex flex-col justify-start">
                     {order.products.map((item) => (
                       <div
@@ -57,16 +57,16 @@ const UserOrderTab = ({ orderInfo }) => {
                         <div className="h-10 w-10 rounded-full flex items-center justify-center overflow-hidden border-gray-500 border-[1px]">
                           <img
                             className="h-full"
-                            src={item.product.thumbnail}
+                            src={item?.product?.thumbnail}
                             alt="product_Image"
                           />
                         </div>
                         <td data-info="title">{item.product.product}</td>
-                        <td>Qty. :{item.quantity}</td>
+                        <td>Qty. :{item?.quantity}</td>
                       </div>
                     ))}
                   </div>
-                  <td data-info="status pending">{order.status} </td>
+                  <td data-info="status pending">{order?.status} </td>
                   <td>
                     <a href="#" className="tp-logout-btn">
                       view

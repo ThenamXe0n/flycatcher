@@ -6,6 +6,7 @@ import PasswordInputBox from "./PasswordInputBox";
 import { useDispatch, useSelector } from "react-redux";
 import { userLoginAsync } from "../../features/Auth/AuthSlice";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
   const [userData, setuserData] = useState();
@@ -46,11 +47,14 @@ const LoginForm = () => {
         localStorage.setItem("user", `${userInfo}`);
         Cookies.set("UserLoggedIn","yes");
         Cookies.set("userID", `${userid}`);
+        if(res.status===201){
+          toast.success("logged in successfully!")
+        }
         Navigate("/user");
       })
       .catch((err) => {
         console.error(err);
-        alert("invalid Credentials");
+        toast.error("invalid Credentials");
       });
     dispatch(userLoginAsync({ email: data.email, password: data.password }));
   };

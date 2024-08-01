@@ -14,22 +14,24 @@ import { selectUser } from "../features/Auth/AuthSlice";
 import { addToCartAsync, addToWishlistAsync } from "../features/Cart/CartSlice";
 import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify";
+import { selectLoggedInUserInfo } from "../features/Auth/AuthSlice";
 import "react-toastify/dist/ReactToastify.css";
 
 const cartNotify = () =>
-    toast.success("Item is been added to cart successfully", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-    });
+  toast.success("Item is been added to cart successfully", {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    draggable: true,
+    progress: undefined,
+  });
 
 const ProductDetailsPage = () => {
   const params = useParams();
+  const loggedInUser = useSelector(selectLoggedInUserInfo);
   const { register, handleSubmit } = useForm();
-  const [quantity,setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(1);
   console.log(quantity);
   const [productRating, setProductRating] = useState([
     {
@@ -84,8 +86,14 @@ const ProductDetailsPage = () => {
       Navigate("/login");
     } else {
       console.log("clicked");
-      dispatch(addToCartAsync({ product: product.productid, user: userId,quantity:quantity }));
-      cartNotify()
+      dispatch(
+        addToCartAsync({
+          product: product.productid,
+          user: userId,
+          quantity: quantity,
+        })
+      );
+      cartNotify();
       console.log(product.productid);
       console.log(userId);
     }
@@ -107,9 +115,13 @@ const ProductDetailsPage = () => {
       Navigate("/login");
     } else {
       dispatch(
-        addToWishlistAsync({ product: product.productid,quantity:quantity, user: userId })
+        addToWishlistAsync({
+          product: product.productid,
+          quantity: quantity,
+          user: userId,
+        })
       );
-      cartNotify()
+      cartNotify();
     }
   };
 
@@ -504,10 +516,10 @@ const ProductDetailsPage = () => {
                     {/* price */}
                     <div className="tp-product-details-price-wrapper mb-20">
                       <span className="tp-product-details-price old-price mx-1">
-                        ${product.price}
+                        ₹{product.price}
                       </span>
                       <span className="tp-product-details-price new-price mx-1">
-                        ${product.finalprice}
+                        ₹{product.finalprice}
                       </span>
                     </div>
                     {/* variations */}
@@ -522,8 +534,8 @@ const ProductDetailsPage = () => {
                             type="button"
                             className="color tp-color-variation-btn"
                           >
-                            <span data-bg-color="#F8B655" />
-                            <span className="tp-color-variation-tootltip">
+                            <span data-bg-color={product?.color} />
+                            <span style={{background:"black"}} className="tp-color-variation-tootltip">
                               Yellow
                             </span>
                           </button>
@@ -565,7 +577,10 @@ const ProductDetailsPage = () => {
                       <div className="tp-product-details-action-item-wrapper d-flex align-items-center">
                         <div className="tp-product-details-quantity">
                           <div className="tp-product-quantity mb-15 mr-15">
-                         <RangeCount quantity={1} getRangeValue={(value)=>setQuantity(value)} />
+                            <RangeCount
+                              quantity={1}
+                              getRangeValue={(value) => setQuantity(value)}
+                            />
                             {/* <span className="tp-cart-minus">
                               <svg
                                 width={11}
@@ -847,89 +862,88 @@ const ProductDetailsPage = () => {
                         aria-labelledby="nav-description-tab"
                         tabIndex={0}
                       >
-                        <div className="tp-product-details-desc-wrapper pt-80">
+                        <div className="tp-product-details-desc-wrapper ">
                           <div className="row justify-content-center">
-                            <div className="col-xl-10">
-                              <div className="tp-product-details-desc-item pb-105">
-                                <div className="row">
-                                  <div className="col-lg-6">
-                                    <div className="tp-product-details-desc-content pt-25">
-                                      <span>{product.product}</span>
-                                      <h3 className="tp-product-details-desc-title">
-                                        Your world at a glance
-                                      </h3>
-                                      <p>{product.discription}</p>
+                            {product?.des_subtitle ? (
+                              <div className="col-xl-10">
+                                <div className="tp-product-details-desc-item pb-105">
+                                  <div className="row">
+                                    <div className="col-lg-6">
+                                      <div className="tp-product-details-desc-content pt-25">
+                                        <span>{product.product}</span>
+                                        <h3 className="tp-product-details-desc-title">
+                                          {product?.des_subtitle}
+                                        </h3>
+                                        <p>{product?.des_info}</p>
+                                      </div>
+                                      {product?.des2_subtitle && (
+                                        <div className="tp-product-details-desc-content">
+                                          <h3 className="tp-product-details-desc-title">
+                                            {product?.des2_subtitle}
+                                          </h3>
+                                          <p>{product?.des2_info}</p>
+                                        </div>
+                                      )}
                                     </div>
-                                    <div className="tp-product-details-desc-content">
-                                      <h3 className="tp-product-details-desc-title">
-                                        Draw inspiration with S Pen
-                                      </h3>
-                                      <p>
-                                        S Pen is a bundle of writing instruments
-                                        in one. Its natural grip, <br /> low
-                                        latency and impressive pressure
-                                        sensitivity will make it your go-to for
-                                        everything from drawing to editing
-                                        documents. And S Pen won't get misplaced
-                                        thanks.
-                                      </p>
+                                    {product?.des_img && (
+                                      <div className="col-lg-6">
+                                        <div className="tp-product-details-desc-thumb">
+                                          <img
+                                            src={product?.des_img}
+                                            alt="product_description"
+                                          />
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="tp-product-details-desc-item  pb-75">
+                                  <div className="row">
+                                    <div className="col-lg-7">
+                                      {product?.des2_img && (
+                                        <div className="tp-product-details-desc-thumb">
+                                          <img
+                                            src={product?.des2_img}
+                                            alt="product-image"
+                                          />
+                                        </div>
+                                      )}
+                                    </div>
+                                    <div className="col-lg-5 order-first order-lg-last">
+                                      {product?.des3_subtitle && (
+                                        <div className="tp-product-details-desc-content des-content-2 pl-40">
+                                          <h3 className="tp-product-details-desc-title">
+                                            {product?.des3_subtitle}
+                                          </h3>
+                                          <p>{product?.des3_info}</p>
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
-                                  <div className="col-lg-6">
-                                    <div className="tp-product-details-desc-thumb">
-                                      <img
-                                        src="assets/img/product/details/desc/product-details-desc-1.jpg"
-                                        alt=""
-                                      />
+                                </div>
+                                <div className="tp-product-details-desc-item">
+                                  <div className="row">
+                                    <div className="col-xl-12">
+                                      {product?.des3_subtitle && (
+                                        <div className="tp-product-details-desc-banner text-center m-img">
+                                          <h3 className="tp-product-details-desc-banner-title tp-product-details-desc-title">
+                                            {product?.des3_subtitle}
+                                          </h3>
+                                          <img
+                                            src={product?.des3_img}
+                                            alt="product-img"
+                                          />
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              <div className="tp-product-details-desc-item  pb-75">
-                                <div className="row">
-                                  <div className="col-lg-7">
-                                    <div className="tp-product-details-desc-thumb">
-                                      <img
-                                        src="assets/img/product/details/desc/product-details-desc-2.jpg"
-                                        alt=""
-                                      />
-                                    </div>
-                                  </div>
-                                  <div className="col-lg-5 order-first order-lg-last">
-                                    <div className="tp-product-details-desc-content des-content-2 pl-40">
-                                      <h3 className="tp-product-details-desc-title">
-                                        Carry with <br /> Confidence and style
-                                      </h3>
-                                      <p>
-                                        Wrap your tablet in a sleek case that's
-                                        as stylish as it is convenient. Galaxy
-                                        Tab S6 Lite Book Cover folds around and
-                                        clings magnetically, so you can easily
-                                        gear up as you're headed out the door.
-                                        There's even a compartment for S pen, so
-                                        you can be sure it doesn't get left
-                                        behind.
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="tp-product-details-desc-item">
-                                <div className="row">
-                                  <div className="col-xl-12">
-                                    <div className="tp-product-details-desc-banner text-center m-img">
-                                      <h3 className="tp-product-details-desc-banner-title tp-product-details-desc-title">
-                                        Speed Memory Power = Epic Races
-                                      </h3>
-                                      <img
-                                        src="assets/img/product/details/desc/product-details-desc-3.jpg"
-                                        alt=""
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                            ) : (
+                              <h1 className="text-3xl font-bold text-center">
+                                No Description found !
+                              </h1>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -945,68 +959,36 @@ const ProductDetailsPage = () => {
                             <div className="col-xl-10">
                               <table>
                                 <tbody>
-                                  <tr>
-                                    <td>Standing screen display size</td>
-                                    <td>Screen display Size 10.4</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Color</td>
-                                    <td>Gray, Dark gray, Mystic black</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Screen Resolution</td>
-                                    <td>1920 x 1200 Pixels</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Max Screen Resolution</td>
-                                    <td>2000 x 1200</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Processor</td>
-                                    <td>2.3 GHz (128 GB)</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Graphics Coprocessor</td>
-                                    <td>
-                                      Exynos 9611, Octa Core (4x2.3GHz +
-                                      4x1.7GHz)
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td>Wireless Type</td>
-                                    <td>802.11a/b/g/n/ac, Bluetooth</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Average Battery Life (in hours)</td>
-                                    <td>13 Hours</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Series</td>
-                                    <td>Samsung Galaxy tab S6 Lite WiFi</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Item model number</td>
-                                    <td>SM-P6102ZAEXOR</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Hardware Platform</td>
-                                    <td>Android</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Operating System</td>
-                                    <td>Android 12</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Batteries</td>
-                                    <td>
-                                      1 Lithium Polymer batteries required.
-                                      (included)
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td>Product Dimensions</td>
-                                    <td>0.28 x 6.07 x 9.63 inches</td>
-                                  </tr>
+                                  {product?.brand && (
+                                    <tr>
+                                      <td>brand</td>
+                                      <td>{product?.brand}</td>
+                                    </tr>
+                                  )}
+                                  {product?.color && (
+                                    <tr>
+                                      <td>Color</td>
+                                      <td>{product?.color}</td>
+                                    </tr>
+                                  )}
+                                  {product?.screen && (
+                                    <tr>
+                                      <td>Screen</td>
+                                      <td>{product?.screen}</td>
+                                    </tr>
+                                  )}
+                                  {product?.category && (
+                                    <tr>
+                                      <td>category</td>
+                                      <td>{product?.category}</td>
+                                    </tr>
+                                  )}
+                                  {product?.os && (
+                                    <tr>
+                                      <td>os</td>
+                                      <td>{product?.os}</td>
+                                    </tr>
+                                  )}
                                 </tbody>
                               </table>
                             </div>
@@ -1561,6 +1543,7 @@ const ProductDetailsPage = () => {
                                           name="name"
                                           id="name"
                                           type="text"
+                                          value={loggedInUser?.name}
                                           placeholder="Shahnewaz Sakil"
                                         />
                                       </div>
@@ -1575,6 +1558,8 @@ const ProductDetailsPage = () => {
                                           name="rating"
                                           min="0"
                                           max="5"
+                                          maxLength="1"
+                                          step="1"
                                           id="rating"
                                           type="number"
                                           placeholder="give stars to this product"

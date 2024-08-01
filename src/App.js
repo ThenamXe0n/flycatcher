@@ -17,7 +17,6 @@ import { ToastContainer } from "react-toastify";
 
 function App() {
   const dispatch = useDispatch();
-  const product = useSelector(selectAllProducts);
   const userId = Cookies.get("userID");
   useEffect(() => {
     if (userId) {
@@ -37,6 +36,7 @@ function App() {
           <Route path={Path.WISHLIST} element={<View.WISHLIST_PATH />} />
           <Route path={Path.CHECKOUT} element={<View.CHECKOUT_PATH />} />
           <Route path={Path.CART} element={<View.CART_PATH />} />
+          <Route path={Path.ORDER} element={<View.ORDER_PATH />} />
         </Route>
         {/* protected routes */}
 
@@ -47,6 +47,7 @@ function App() {
         <Route path={Path.home} element={<View.HOME_PATH />} />
         <Route path={Path.LOGIN} element={<View.LOGIN_PATH />} />
         <Route path={Path.SHOP} element={<View.SHOP_PATH />} />
+        <Route path={Path.BLOG} element={<View.BLOG_PAGE />} />
 
         <Route path={Path.REGISTER} element={<View.REGISTER_PATH />} />
         <Route path={Path.navbar} element={<View.NAVBAR_PATH />} />

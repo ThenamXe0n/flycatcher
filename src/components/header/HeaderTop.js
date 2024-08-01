@@ -5,6 +5,7 @@ import { CgLogOut } from "react-icons/cg";
 import Cookies from "js-cookie";
 import { IoCartOutline, IoLogInOutline } from "react-icons/io5";
 import { PiHandHeart } from "react-icons/pi";
+import { toast } from "react-toastify";
 
 const HeaderTop = () => {
   const [showSettingMenu, setShowSettingMenu] = useState(false);
@@ -58,7 +59,7 @@ const HeaderTop = () => {
                   />
                 </svg>
               </span>
-              <p>FREE Express Shipping On Orders $570+</p>
+              <p>FREE Express Shipping On Orders ₹570+</p>
             </div>
           </div>
           <div className="col-md-6">
@@ -83,7 +84,7 @@ const HeaderTop = () => {
                     </li>
                   </ul>
                 </div>
-                <div className="tp-header-top-menu-item tp-header-currency">
+                {/* <div className="tp-header-top-menu-item tp-header-currency">
                   <span
                     className="tp-header-currency-toggle"
                     id="tp-header-currency-toggle"
@@ -107,7 +108,7 @@ const HeaderTop = () => {
                       <a href="#">KWD</a>
                     </li>
                   </ul>
-                </div>
+                </div> */}
                 <div className="tp-header-top-menu-item tp-header-setting">
                   {console.log(showSettingMenu)}
                   <span
@@ -153,10 +154,11 @@ const HeaderTop = () => {
                         className=" cursor-pointer hover:text-[dodgerblue] text-black"
                         onClick={() => {
                           localStorage.removeItem("user");
+                          localStorage.removeItem("token");
                           Cookies.remove("userID");
                           Cookies.remove("token");
                           Cookies.set("UserLoggedIn", "no");
-                          alert("You have been logged out ");
+                          toast.info("You have been logged out ");
                           window.location.replace("/")
                         }}
                       >

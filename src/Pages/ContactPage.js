@@ -7,6 +7,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import { FaInstagram } from "react-icons/fa";
 import { FaWhatsapp } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const ContactPage = () => {
   const [inqueryMessage, setInqueryMessage] = useState(null);
@@ -15,6 +16,7 @@ const ContactPage = () => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
   const saveDetailsOfInquisitive = (checked, data) => {
@@ -31,9 +33,10 @@ const ContactPage = () => {
   const sendInqueryMesssage = (data) => {
     console.log(data);
     saveDetailsOfInquisitive(saveDetailsChecked, data);
-    alert(
+    toast.success(
       `${data.name} your inquery has been submitted Successfully. will get back to you soon.`
     );
+    reset()
   };
 
   return (
@@ -232,10 +235,10 @@ const ContactPage = () => {
                         </h4>
                         <div className="tp-contact-social-icon">
                           <a href="#">
-                           <FaFacebookF />
+                            <FaFacebookF />
                           </a>
                           <a href="#">
-                           <FaWhatsapp />
+                            <FaWhatsapp />
                           </a>
                           <a href="#">
                             <FaInstagram />
@@ -271,7 +274,10 @@ const ContactPage = () => {
                   </span>
                 </div>
                 <div className="tp-map-iframe">
-                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.15830894612!2d-74.11976383964465!3d40.69766374865766!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1678114595329!5m2!1sen!2sbd" />
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d488629.2779440428!2d77.350048149354!3d28.57966055482809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce3b9b31e0901%3A0x5e80ea7ddf108508!2sIndia!5e0!3m2!1sen!2sus!4v1678114595329!5m2!1sen!2sus
+"
+                  />
                 </div>
               </div>
             </div>

@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { userRegister } from "../../features/Auth/AuthAPI";
 import { userRegisterAsync } from "../../features/Auth/AuthSlice";
 const RegisterForm = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit,reset } = useForm();
   const dispatch = useDispatch();
   const onSubmit = (data) => {
     const userInfo = {
@@ -30,6 +30,7 @@ const RegisterForm = () => {
     //   })
     //   .catch((err) => console.error(err));
     dispatch(userRegisterAsync({name:data.name,contact:data.contact,email:data.email,password:data.password}))
+    reset()
     
   };
   return (

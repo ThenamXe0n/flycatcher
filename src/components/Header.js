@@ -3,6 +3,7 @@ import logo from "../assets/img/logo/logo.png";
 import { Link } from "react-router-dom";
 import HeaderTop from "./header/HeaderTop";
 import HeaderBottom from "./header/HeaderBottom";
+import NavBar from "./Navigation/NavBar";
 
 const Header = () => {
   return (
@@ -15,7 +16,8 @@ const Header = () => {
             <HeaderTop />
             {/* header top end */}
             {/* header bottom start */}
-            <HeaderBottom />
+            {/* <HeaderBottom /> */}
+            <NavBar />
             {/* header bottom start */}
           </div>
         </header>

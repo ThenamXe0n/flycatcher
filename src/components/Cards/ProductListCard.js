@@ -319,9 +319,9 @@ const ProductListCard = ({
           </div>
           <div className="tp-product-price-wrapper-2">
             <span className="tp-product-price-2 new-price">
-              ${productFinalPrice}
+              ₹{productFinalPrice}
             </span>
-            <span className="tp-product-price-2 old-price">${productMRP}</span>
+            <span className="tp-product-price-2 old-price">₹{productMRP}</span>
           </div>
           <p>{productDiscription}</p>
           <div className="tp-product-list-add-to-cart">

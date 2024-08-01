@@ -1,7 +1,7 @@
 import React from "react";
 import { GoTag } from "react-icons/go";
 
-const BlogCard = ({blogDate,blogIsOf,blogType,blogDescription,blogTitle,blogImage}) => {
+const BlogCard = ({blogDate,blogIsOf,blogType,blogDescription,blogTitle,blogImage,blogLink}) => {
   return (
     <div className="tp-blog-item mb-30 swiper-slide w-[30rem] m-6" >
       <div className="tp-blog-thumb p-relative fix">
@@ -36,8 +36,8 @@ const BlogCard = ({blogDate,blogIsOf,blogType,blogDescription,blogTitle,blogImag
           The world is an amazing place providing an incredible assortment of
           interesting locations across.
         </p> */}
-        <div className="tp-blog-btn flex">
-          <a href="blog-details.html" className="tp-btn-2 tp-btn-border-2">
+        <div className="tp-blog-btn flex cursor-pointer">
+          <a href={blogLink} className="tp-btn-2 tp-btn-border-2">
             Read More ➡️
           </a>
         </div>

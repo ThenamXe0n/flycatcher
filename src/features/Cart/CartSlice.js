@@ -7,6 +7,7 @@ import {
   removeCartItem,
   removeWishlistItem,
 } from "./CartAPI";
+import { toast } from "react-toastify";
 
 const initialState = {
   UserCartItems: [],
@@ -51,7 +52,7 @@ export const addToWishlistAsync = createAsyncThunk(
   "wishlist/addItem",
   async (product, userId) => {
     const response = await addToWishlist(product, userId);
-    return response.data;
+    return response;
   }
 );
 
@@ -95,7 +96,13 @@ export const cartSlice = createSlice({
       })
       .addCase(addToWishlistAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.UserWishlistItem.push(action.payload);
+        if (action.payload.status !== 200) {
+          toast.error("Item Already Existed in Wishlist");
+        }
+        if (action.payload.status === 200) {
+          state.UserWishlistItem.push(action.payload.data);
+          toast.success("Item added to wishlist")
+        }
       })
       .addCase(removeWishlistItemAsync.pending, (state) => {
         state.status = "loading";

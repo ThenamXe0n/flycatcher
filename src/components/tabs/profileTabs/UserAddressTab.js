@@ -1,6 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { selectLoggedInUserInfo } from "../../../features/Auth/AuthSlice";
 
 const UserAddressTab = () => {
+  const userInfo = useSelector(selectLoggedInUserInfo)
+  const userAddress  = userInfo?.address[0]
   return (
     <div className="col-xxl-8 col-lg-8 shadow-effect">
       <div
@@ -30,25 +34,22 @@ const UserAddressTab = () => {
                 <div className="profile__address-content">
                   <h3 className="profile__address-title">Billing Address</h3>
                   <p>
-                    <span>Street:</span>3576 Glen Street
+                    <span>Street:</span>{userAddress?.street}
                   </p>
                   <p>
-                    <span>City:</span>Summer Shade
+                    <span>City:</span>{userAddress?.city}
                   </p>
                   <p>
-                    <span>State/province/area:</span>Kentucky
+                    <span>State/province/area:</span>{userAddress?.locality}
                   </p>
                   <p>
-                    <span>Phone number:</span>270-428-8378
+                    <span>Phone number:</span>{userInfo?.contact}
                   </p>
                   <p>
-                    <span>Zip code:</span>42166
+                    <span>Pin code:</span>{userAddress?.pincode}
                   </p>
                   <p>
-                    <span>Country calling code:</span> +1
-                  </p>
-                  <p>
-                    <span>Country:</span>United States
+                    <span>Country:</span>{userAddress?.country}
                   </p>
                 </div>
               </div>
@@ -73,25 +74,22 @@ const UserAddressTab = () => {
                 <div className="profile__address-content">
                   <h3 className="profile__address-title">Shipping Address</h3>
                   <p>
-                    <span>Street:</span>3133 Lewis Street
+                    <span>Street:</span>{userAddress?.street}
                   </p>
                   <p>
-                    <span>City:</span>Naperville
+                    <span>City:</span>{userAddress?.city}
                   </p>
                   <p>
-                    <span>State/province/area:</span>Illinois
+                    <span>State/province/area:</span>{userAddress?.locality}
                   </p>
                   <p>
-                    <span>Phone number:</span>630-857-9127
+                    <span>Phone number:</span>{userInfo?.contact}
                   </p>
                   <p>
-                    <span>Zip code:</span> 60563
+                    <span>Pin code:</span>{userAddress?.pincode}
                   </p>
                   <p>
-                    <span>Country calling code:</span>+1
-                  </p>
-                  <p>
-                    <span>Country:</span>United States
+                    <span>Country:</span>{userAddress?.country}
                   </p>
                 </div>
               </div>

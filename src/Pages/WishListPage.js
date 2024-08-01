@@ -14,6 +14,7 @@ import {
   removeWishlistItemAsync,
   selectUserWishlistItem,
 } from "../features/Cart/CartSlice";
+import { toast } from "react-toastify";
 
 const WishListPage = () => {
   const Navigate = useNavigate();
@@ -34,20 +35,8 @@ const WishListPage = () => {
   const addToCart = (productId, wishlistid) => {
     dispatch(addToCartAsync({ product: productId, user: id }));
     dispatch(removeWishlistItemAsync({ id: wishlistid }));
-    alert("Item has been moved to Cart")
-    // axios
-    //   .post("http://localhost:8080/api/cart/add", {
-    //     product: productId,
-    //     user: id,
-    //   })
-    //   .then((res) => {
-    //     alert("Item has been added to cart");
-    //     axios.post("http://localhost:8080/api/wishlist/remove",{id:wishlistid});
-    //     console.log("test")
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.message);
-    //   });
+    toast.success("Item has been moved to Cart")
+    
   };
 
   return (
@@ -68,7 +57,7 @@ const WishListPage = () => {
                         Product
                       </th>
                       <th className="tp-cart-header-price">Price</th>
-                      <th className="tp-cart-header-quantity">Quantity</th>
+                     
                       <th>Action</th>
                       <th />
                     </tr>
@@ -97,13 +86,8 @@ const WishListPage = () => {
                         </td>
                         {/* price */}
                         <td className="tp-cart-price">
-                          <span>${item.product?.finalprice}</span>
+                          <span>₹{item.product?.finalprice}</span>
                         </td>
-                        <RangeCount
-                          quantity={item.quantity}
-                          getRangeValue={(value)=>{setRangeValue(value)}}
-                        />
-                        {console.log(rangeValue)}
                         <td className="tp-cart-add-to-cart">
                           <button
                             type="submit"

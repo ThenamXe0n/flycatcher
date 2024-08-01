@@ -1,15 +1,36 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 import {
   selectLoggedInUserInfo,
-  fetchUserByIdAsync
+  fetchUserByIdAsync,
 } from "../../../features/Auth/AuthSlice";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { AiTwotonePicture } from "react-icons/ai";
 
 const UserInfoTab = () => {
   const userId = Cookies.get("userID");
   const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  // form submit handler
+  const onSubmit = (data) => {
+    axios
+      .patch(`http://localhost:8080/api/user/update/${userId}`, data)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err.messsage));
+    // window.location.reload();
+    toast.success("user profile has been updated successfully!");
+  };
+
   useEffect(() => {
     dispatch(fetchUserByIdAsync(userId));
   }, []);
@@ -25,12 +46,15 @@ const UserInfoTab = () => {
         <div className="profile__info">
           <h3 className="profile__info-title">Personal Details</h3>
           <div className="profile__info-content">
-            <form action="#">
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row">
                 <div className="col-xxl-6 col-md-6">
                   <div className="profile__input-box">
                     <div className="profile__input">
                       <input
+                        {...register("name", {
+                          required: "*this is required",
+                        })}
                         type="text"
                         placeholder="Enter your username"
                         defaultValue={userInfo.name}
@@ -66,9 +90,12 @@ const UserInfoTab = () => {
                   <div className="profile__input-box">
                     <div className="profile__input">
                       <input
+                        {...register("email", {
+                          required: "*this is required",
+                        })}
                         type="email"
                         placeholder="Enter your email"
-                        defaultValue={userInfo.email}
+                        defaultValue={userInfo?.email}
                       />
                       <span>
                         <svg
@@ -103,12 +130,15 @@ const UserInfoTab = () => {
                   <div className="profile__input-box">
                     <div className="profile__input">
                       <input
+                        {...register("profile", {
+                          required: "*this is required",
+                        })}
                         type="text"
-                        placeholder="Enter username"
-                        defaultValue={userInfo.email}
+                        placeholder="Enter profile pic url"
+                        defaultValue={userInfo?.profile}
                       />
                       <span>
-                        <i className="fa-brands fa-facebook-f" />
+                       <AiTwotonePicture />
                       </span>
                     </div>
                   </div>
@@ -117,23 +147,12 @@ const UserInfoTab = () => {
                   <div className="profile__input-box">
                     <div className="profile__input">
                       <input
-                        type="text"
-                        placeholder="Enter username"
-                        defaultValue={userInfo.email}
-                      />
-                      <span>
-                        <i className="fa-brands fa-twitter" />
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xxl-6 col-md-6">
-                  <div className="profile__input-box">
-                    <div className="profile__input">
-                      <input
+                        {...register("contact", {
+                          required: "*this is required",
+                        })}
                         type="text"
                         placeholder="Enter your number"
-                        defaultValue={userInfo.contact}
+                        defaultValue={userInfo?.contact}
                       />
                       <span>
                         <svg
@@ -168,58 +187,6 @@ const UserInfoTab = () => {
                           />
                         </svg>
                       </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xxl-6 col-md-6">
-                  <div className="profile__input-box">
-                    <div className="profile__input">
-                      <select className=" py-2 px-1 border-gray-400">
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>Others</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xxl-12">
-                  <div className="profile__input-box">
-                    <div className="profile__input">
-                      <input
-                        type="text"
-                        placeholder="Enter your address"
-                        defaultValue={userInfo.address}
-                      />
-                      <span>
-                        <svg
-                          width={16}
-                          height={18}
-                          viewBox="0 0 16 18"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M7.99377 10.1461C9.39262 10.1461 10.5266 9.0283 10.5266 7.64946C10.5266 6.27061 9.39262 5.15283 7.99377 5.15283C6.59493 5.15283 5.46094 6.27061 5.46094 7.64946C5.46094 9.0283 6.59493 10.1461 7.99377 10.1461Z"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                          />
-                          <path
-                            d="M1.19707 6.1933C2.79633 -0.736432 13.2118 -0.72843 14.803 6.2013C15.7365 10.2663 13.1712 13.7072 10.9225 15.8357C9.29079 17.3881 6.70924 17.3881 5.06939 15.8357C2.8288 13.7072 0.263493 10.2583 1.19707 6.1933Z"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                          />
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xxl-12">
-                  <div className="profile__input-box">
-                    <div className="profile__input">
-                      <textarea
-                        placeholder="Enter your bio"
-                        defaultValue={"Hi there, this is my bio..."}
-                      />
                     </div>
                   </div>
                 </div>

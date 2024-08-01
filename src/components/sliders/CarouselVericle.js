@@ -23,8 +23,8 @@ const CarouselVericle = () => {
                         Samsung Galaxy Tab S6, Wifi Tablet
                       </h3>
                       <div className="tp-product-banner-price mb-40">
-                        <span className="old-price">$1240.00</span>
-                        <p className="new-price">$975.00</p>
+                        <span className="old-price">₹1240.00</span>
+                        <p className="new-price">₹975.00</p>
                       </div>
                       <div className="tp-product-banner-btn">
                         <a href="shop.html" className="tp-btn tp-btn-2">
@@ -65,8 +65,8 @@ const CarouselVericle = () => {
                         Apple iPad 10.2 9th Gen - 2021
                       </h3>
                       <div className="tp-product-banner-price mb-40">
-                        <span className="old-price">$1450.00</span>
-                        <p className="new-price">$1199.00</p>
+                        <span className="old-price ">₹1450.00</span>
+                        <p className="new-price ">₹1199.00</p>
                       </div>
                       <div className="tp-product-banner-btn">
                         <a href="shop.html" className="tp-btn tp-btn-2">
@@ -107,8 +107,8 @@ const CarouselVericle = () => {
                         Microsoft Surface Pro 8, Wifi Included
                       </h3>
                       <div className="tp-product-banner-price mb-40">
-                        <span className="old-price">$1249.00</span>
-                        <p className="new-price">$1300.00</p>
+                        <span className="old-price">₹1249.00</span>
+                        <p className="new-price">₹1300.00</p>
                       </div>
                       <div className="tp-product-banner-btn">
                         <a href="shop.html" className="tp-btn tp-btn-2">

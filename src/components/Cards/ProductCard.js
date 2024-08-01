@@ -1,11 +1,13 @@
 import React from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const ProductCard = ({
   productImg,
   productDiscption,
   productName,
   ProductPrice,
+  productId,
 }) => {
   return (
     <div className="col-xl-3 col-lg-3 col-sm-6">
@@ -132,12 +134,12 @@ const ProductCard = ({
         </div>
         {/* product content */}
         <div className="tp-product-content">
-          <div className="tp-product-category">
-            <a href="shop.html">{productName}</a>
-          </div>
-          <h3 className="tp-product-title">
-            <a href="product-details.html">{productDiscption}</a>
-          </h3>
+          <Link to={`product-details/${productId}`}><div className="tp-product-category"> 
+            {productName}
+          </div></Link>
+          <Link to={`product-details/${productId}`}><h3 className="tp-product-title">
+            {productDiscption}
+          </h3></Link>
           <div className="tp-product-rating d-flex align-items-center">
             <div className="tp-product-rating-icon">
               <span>
@@ -172,7 +174,7 @@ const ProductCard = ({
             </div>
           </div>
           <div className="tp-product-price-wrapper">
-            <span className="tp-product-price">${ProductPrice}</span>
+            <span className="tp-product-price">₹{ProductPrice}</span>
           </div>
         </div>
       </div>

@@ -40,7 +40,7 @@ const BagSidebar = ({ openCart, getOpencartStatus }) => {
           <div className="cartmini__shipping">
             <p>
               {" "}
-              Free Shipping for all orders over <span>$50</span>
+              Free Shipping for all orders over <span>₹50</span>
             </p>
             <div className="progress">
               <div
@@ -86,7 +86,7 @@ const BagSidebar = ({ openCart, getOpencartStatus }) => {
               <div className="cartmini__content">
                 <h5 className="cartmini__title">{items.product?.product}</h5>
                 <div className="cartmini__price-wrapper">
-                  <span className="cartmini__price">${items.product?.finalprice}</span>
+                  <span className="cartmini__price">₹{items.product?.finalprice}</span>
                   <span className="cartmini__quantity">x{items.quantity}</span>
                 </div>
               </div>
@@ -105,7 +105,7 @@ const BagSidebar = ({ openCart, getOpencartStatus }) => {
         <div className="cartmini__checkout">
           <div className="cartmini__checkout-title mb-30">
             <h4>Subtotal:</h4>
-            <span>${totalPrice}</span>
+            <span>₹{totalPrice}</span>
           </div>
           <div className="cartmini__checkout-btn">
             <Link to="/cart" className="tp-btn mb-10 w-100">

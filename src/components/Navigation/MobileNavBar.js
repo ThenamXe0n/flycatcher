@@ -43,7 +43,7 @@ const MobileNavBar = () => {
             <i className="fa-solid fa-bars" />
             All Categories
           </button>
-          <div className="tp-category-mobile-menu">
+          {/* <div className="tp-category-mobile-menu">
             <nav className="tp-category-menu-content">
               <ul>
                 <li>
@@ -512,7 +512,7 @@ const MobileNavBar = () => {
                 </li>
               </ul>
             </nav>
-          </div>
+          </div> */}
         </div>
         <div className="tp-main-menu-mobile fix mb-40">
           <nav className="tp-main-menu-content">
