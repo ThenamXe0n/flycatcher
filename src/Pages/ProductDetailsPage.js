@@ -99,7 +99,7 @@ const ProductDetailsPage = () => {
     }
 
     //  axios
-    //     .post("http://localhost:8080/api/cart/add", {
+    //     .post("https://flycatcher-backend.vercel.app/api/cart/add", {
     //       user: userId,
     //       product: product.productid,
     //     })
@@ -134,7 +134,7 @@ const ProductDetailsPage = () => {
     };
     console.log(review);
     axios
-      .post("http://localhost:8080/api/product/rateproduct", review)
+      .post("https://flycatcher-backend.vercel.app/api/product/rateproduct", review)
       .then((res) => {
         alert(
           ` thankyou! ${res.data.customerName} for rating the product. your review has been submited`
@@ -147,11 +147,11 @@ const ProductDetailsPage = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/product/rating?product=${params.id}`)
+      .get(`https://flycatcher-backend.vercel.app/api/product/rating?product=${params.id}`)
       .then((res) => setProductRating(res.data))
       .catch((error) => console.log(error.message));
     axios
-      .get(`http://localhost:8080/api/product/${params.id}`)
+      .get(`https://flycatcher-backend.vercel.app/api/product/${params.id}`)
       .then((response) => setProduct(response.data))
       .catch((error) => console.log(error));
     console.log(product);
