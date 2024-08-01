@@ -13,7 +13,7 @@ const HeaderBottom = () => {
   const [categoryShow, setCategoryShow] = useState(0);
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/product/allproducts")
+      .get("https://flycatcher-backend.vercel.app/api/product/allproducts")
       .then((res) => {
         setProductItems(res.data.product);
       })
