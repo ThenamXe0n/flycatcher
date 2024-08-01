@@ -46,7 +46,7 @@ const ShopPage = () => {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
     dispatch(fetchAllProductsAsync({ pagination }));
     axios
-      .get("http://localhost:8080/api/category/allcategory")
+      .get("https://flycatcher-backend.vercel.app/api/category/allcategory")
       .then((response) => {
         setCategory(response.data);
       });
@@ -58,13 +58,13 @@ const ShopPage = () => {
   }, [totalItems]);
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/product/allproducts")
+      .get("https://flycatcher-backend.vercel.app/api/product/allproducts")
       .then((response) => {
         setAllProduct(response.data.product);
       })
       .catch((error) => console.log(error.message));
   }, []);
-  //   axios.get("http://localhost:8080/api/category/allcategory").then((response) => {
+  //   axios.get("https://flycatcher-backend.vercel.app/api/category/allcategory").then((response) => {
   //     setCategory(response.data);
   //   });
   // }, []);
