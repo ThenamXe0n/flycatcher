@@ -37,6 +37,7 @@ function App() {
           <Route path={Path.CHECKOUT} element={<View.CHECKOUT_PATH />} />
           <Route path={Path.CART} element={<View.CART_PATH />} />
           <Route path={Path.ORDER} element={<View.ORDER_PATH />} />
+          <Route path={Path.TRACKORDER} element={<View.ORDER_TRACK />} />
         </Route>
         {/* protected routes */}
 

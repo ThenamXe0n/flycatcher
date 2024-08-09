@@ -11,4 +11,4 @@ export {default as CHECKOUT_PATH} from '../Pages/CheckoutPage';
 export {default as CONTACT_PATH} from '../Pages/ContactPage';
 export {default as ORDER_PATH} from "../Pages/OrderPage";
 export {default as BLOG_PAGE} from "../Pages/BlogPage"
- 
+export {default as ORDER_TRACK} from "../Pages/OrderTrackingPage"

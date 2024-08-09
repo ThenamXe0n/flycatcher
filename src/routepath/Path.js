@@ -13,5 +13,6 @@ const Path = {
   CONTACT:"/contact",
   ORDER:"/order",
   BLOG:"/blog",
+  TRACKORDER:"/order-track/:id"
 };
 export default Path;
