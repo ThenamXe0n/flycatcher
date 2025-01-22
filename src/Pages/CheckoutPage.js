@@ -41,7 +41,7 @@ const CheckoutPage = () => {
   const onSubmit = (data) => {
     console.log(data);
     axios
-      .patch(`http://localhost:8080/api/user/update/${userId}`, {
+      .patch(`https://flycatcher-backend.vercel.app/api/user/update/${userId}`, {
         address: data,
       })
       .then((res) => console.log(res))
@@ -88,13 +88,13 @@ const CheckoutPage = () => {
       totalItems: checkoutItems.length,
     };
     console.log(body);
-    axios.post(`http://localhost:8080/api/order/addorder`, {
+    axios.post(`https://flycatcher-backend.vercel.app/api/order/addorder`, {
       products: checkoutItems,
       user: userId,
       totalamount: totalPrice,
       totalItems: checkoutItems.length,
     });
-    axios.post(`http://localhost:8080/api/cart/clear?user=${userId}`);
+    axios.post(`https://flycatcher-backend.vercel.app/api/cart/clear?user=${userId}`);
     toast.success("your order is place successfully");
     // window.location.replace("/order")
   };
@@ -103,7 +103,7 @@ const CheckoutPage = () => {
   //checkout function
   const checkout = async () => {
     try {
-      const response = await fetch("http://localhost:8080/checkout", {
+      const response = await fetch("https://flycatcher-backend.vercel.app/checkout", {
         method: "POST",
         body: JSON.stringify({
           items: checkoutItems,
