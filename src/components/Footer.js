@@ -34,10 +34,6 @@ const Footer = () => {
                         <img src={logo} alt="logo" height={250} />
                       </Link>
                     </div>
-                    <p className="tp-footer-desc">
-                      We are a team of designers and developers that create high
-                      quality WordPress
-                    </p>
                     <div className="tp-footer-social flex gap-5">
                       <a href="https://facebook.com">
                         <FaSquareFacebook />
@@ -107,7 +103,7 @@ const Footer = () => {
                     <div className="tp-footer-talk mb-20">
                       <span>Got Questions? Call us</span>
                       <h4>
-                        <a href="tel:670-413-90-762">+670 413 90 762</a>
+                        <a href="tel:670-413-90-762">+91 8319850260</a>
                       </h4>
                     </div>
                     <div className="tp-footer-contact">
@@ -158,8 +154,8 @@ const Footer = () => {
                         </div>
                         <div className="tp-footer-contact-content">
                           <p>
-                            <a href="mailto:shofy@support.com">
-                              shofy@support.com
+                            <a href="mailto:thenameet0@gmail.com">
+                             thenameet0@gmail.com
                             </a>
                           </p>
                         </div>
@@ -193,7 +189,7 @@ const Footer = () => {
                               href="https://www.google.com/maps/place/Bhanwar+Kuwa,+Indore,+Madhya+Pradesh/@22.6873448,75.8556106,15z/data=!3m1!4b1!4m6!3m5!1s0x3962fce4e3fb47b5:0xc0233b393fbd54de!8m2!3d22.6878208!4d75.8664672!16s%2Fm%2F0ds8_r9?entry=ttu"
                               target="_blank"
                             >
-                              xyx street <br />
+                             
                               Indore(M.P), India
                             </a>
                           </p>

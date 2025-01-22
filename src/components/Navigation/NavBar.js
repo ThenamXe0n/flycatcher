@@ -15,6 +15,7 @@ import BagSidebar from "../UiComponents/BagSidebar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { originPath } from "../../assets/js/main";
+import { navItemData } from "../../data/navBarData";
 
 const NavBar = () => {
   const origin_path = originPath();
@@ -40,8 +41,7 @@ const NavBar = () => {
     const ItemsArray = ProductItems;
     const filteredArray = ItemsArray.filter((item) => {
       return (
-        item.product?.includes(searchVal) ||
-        item?.category?.includes(searchVal)
+        item.product?.includes(searchVal) || item?.category?.includes(searchVal)
       );
     });
     console.log(filteredArray);
@@ -1018,7 +1018,7 @@ const NavBar = () => {
                     </ul>
                   </li>
                   <li className="has-dropdown">
-                   <Link to="blog"> Blog </Link>
+                    <Link to="blog"> Blog </Link>
                   </li>
                   <li>
                     <Link to="/contact">Contact</Link>
@@ -1104,98 +1104,112 @@ const NavBar = () => {
                 <div className="main-menu menu-style-2">
                   <nav className="tp-main-menu-content">
                     <ul>
-                      <li className="has-dropdown has-mega-menu">
-                        <Link className="flex" to="/">
-                          Home
-                        </Link>
-                        {/* <div className="home-menu tp-submenu tp-mega-menu">
-                          <div className="row row-cols-1 row-cols-lg-4 row-cols-xl-5">
-                            <div className="col">
-                              <div className="home-menu-item ">
-                                <Link to="/">
-                                  <div className="home-menu-thumb p-relative fix">
-                                    <img
-                                      src={`${origin_path}/assets/img/menu/menu-home-1.jpg`}
-                                      alt=""
-                                    />
+                      {navItemData.map((nav, navidx) => (
+                        <li className="has-dropdown has-mega-menu">
+                          <Link key={navidx} className="flex capitalize" to={nav.url}>
+                         {nav.title}
+                          </Link>
+                          {nav?.submenu && (
+                            <div className="home-menu tp-submenu tp-mega-menu">
+                              <div className="row row-cols-1 row-cols-lg-4 row-cols-xl-5">
+                                {Array.isArray(nav.submenu) &&
+                                  nav.submenu.map((subNav, idx) => (
+                                    <div key={`sub${idx}`} className="col">
+                                      <div className="home-menu-item ">
+                                        <Link to={subNav.url}>
+                                          <div className="home-menu-thumb p-relative fix">
+                                            <img
+                                              src={`${origin_path}/${subNav.poster}`}
+                                              alt={subNav.title}
+                                            />
+                                          </div>
+                                          <div className="home-menu-content">
+                                            <h5 className="home-menu-title">
+                                              {subNav.title}
+                                            </h5>
+                                          </div>
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  ))}
+                                {/* <div className="col">
+                                  <div className="home-menu-item ">
+                                    <Link href="/">
+                                      <div className="home-menu-thumb p-relative fix">
+                                        <img
+                                          src={`${origin_path}/assets/img/menu/menu-home-2.jpg`}
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div className="home-menu-content">
+                                        <h5 className="home-menu-title">
+                                          Fashion
+                                        </h5>
+                                      </div>
+                                    </Link>
                                   </div>
-                                  <div className="home-menu-content">
-                                    <h5 className="home-menu-title">
-                                      Electronics{" "}
-                                    </h5>
+                                </div>
+                                <div className="col">
+                                  <div className="home-menu-item ">
+                                    <a href="index-3.html">
+                                      <div className="home-menu-thumb p-relative fix">
+                                        <img
+                                          src={`${origin_path}/assets/img/menu/menu-home-3.jpg`}
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div className="home-menu-content">
+                                        <h5 className="home-menu-title">
+                                          Beauty
+                                        </h5>
+                                      </div>
+                                    </a>
                                   </div>
-                                </Link>
+                                </div>
+                                <div className="col">
+                                  <div className="home-menu-item ">
+                                    <a href="index-4.html">
+                                      <div className="home-menu-thumb p-relative fix">
+                                        <img
+                                          src={`${origin_path}/assets/img/menu/menu-home-4.jpg`}
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div className="home-menu-content">
+                                        <h5 className="home-menu-title">
+                                          Jewelry{" "}
+                                        </h5>
+                                      </div>
+                                    </a>
+                                  </div>
+                                </div>
+                                <div className="col">
+                                  <div className="home-menu-item ">
+                                    <a href="index-5.html">
+                                      <div className="home-menu-thumb p-relative fix">
+                                        <img
+                                          src={`${origin_path}/assets/img/menu/menu-home-5.jpg`}
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div className="home-menu-content">
+                                        <h5 className="home-menu-title">
+                                          Grocery
+                                        </h5>
+                                      </div>
+                                    </a>
+                                  </div>
+                                </div> */}
                               </div>
                             </div>
-                            <div className="col">
-                              <div className="home-menu-item ">
-                                <Link href="/">
-                                  <div className="home-menu-thumb p-relative fix">
-                                    <img
-                                      src={`${origin_path}/assets/img/menu/menu-home-2.jpg`}
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div className="home-menu-content">
-                                    <h5 className="home-menu-title">Fashion</h5>
-                                  </div>
-                                </Link>
-                              </div>
-                            </div>
-                            <div className="col">
-                              <div className="home-menu-item ">
-                                <a href="index-3.html">
-                                  <div className="home-menu-thumb p-relative fix">
-                                    <img
-                                      src={`${origin_path}/assets/img/menu/menu-home-3.jpg`}
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div className="home-menu-content">
-                                    <h5 className="home-menu-title">Beauty</h5>
-                                  </div>
-                                </a>
-                              </div>
-                            </div>
-                            <div className="col">
-                              <div className="home-menu-item ">
-                                <a href="index-4.html">
-                                  <div className="home-menu-thumb p-relative fix">
-                                    <img
-                                      src={`${origin_path}/assets/img/menu/menu-home-4.jpg`}
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div className="home-menu-content">
-                                    <h5 className="home-menu-title">
-                                      Jewelry{" "}
-                                    </h5>
-                                  </div>
-                                </a>
-                              </div>
-                            </div>
-                            <div className="col">
-                              <div className="home-menu-item ">
-                                <a href="index-5.html">
-                                  <div className="home-menu-thumb p-relative fix">
-                                    <img
-                                      src={`${origin_path}/assets/img/menu/menu-home-5.jpg`}
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div className="home-menu-content">
-                                    <h5 className="home-menu-title">Grocery</h5>
-                                  </div>
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div> */}
-                      </li>
-                      <li className="has-dropdown has-mega-menu">
-                        <Link to="/shop" className="flex">
+                          )}
+                        </li>
+                      ))}
+
+                      {/* <li className="has-dropdown has-mega-menu"> */}
+                        {/* <Link to="/shop" className="flex">
                           Shop
-                        </Link>
+                        </Link> */}
                         {/* <div className="shop-mega-menu tp-submenu tp-mega-menu">
                           <div className="row">
                             <div className="col-lg-2">
@@ -1351,22 +1365,7 @@ const NavBar = () => {
                             </div>
                           </div>
                         </div> */}
-                      </li>
-                      <li className="has-dropdown has-mega-menu ">
-                        <Link to="/order" className="flex">
-                          My Orders
-                        </Link>
-                      </li>
-                      <li className="has-dropdown">
-                        <Link to="/blog" className="flex">
-                          Blog
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/contact" className="flex">
-                          Contact
-                        </Link>
-                      </li>
+                      {/* </li> */}
                     </ul>
                   </nav>
                 </div>
